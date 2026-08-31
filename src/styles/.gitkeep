@@ -1,0 +1,2 @@
+Reserved for the migration: public/assets/css/site.css moves here when Astro
+takes over bundling. See docs/MIGRATION.md step 4.

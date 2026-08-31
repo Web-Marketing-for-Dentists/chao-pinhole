@@ -1,0 +1,15 @@
+---
+/**
+ * SellWithChat live chat widget (an ApexChat white-label).
+ *
+ * The widget renders its own launcher/CTA, so there is nothing to style and no
+ * chat card in the contact section. It must be present on every page —
+ * BaseLayout renders this before the site script.
+ *
+ * `is:inline` so Astro emits the tag verbatim instead of bundling it.
+ * The protocol-relative URL is the vendor's snippet as supplied; on the live
+ * HTTPS domain it resolves to HTTPS.
+ */
+---
+
+<script is:inline src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>

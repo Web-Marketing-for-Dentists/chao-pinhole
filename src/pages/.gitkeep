@@ -1,0 +1,3 @@
+Astro pages land here during the migration (see docs/MIGRATION.md).
+`astro build` fails while this directory has no pages — that is expected;
+the site currently builds from public/ with no build step.

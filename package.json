@@ -1,0 +1,22 @@
+{
+  "name": "chao-pinhole",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Static rebuild of thepinholeclinic.com — Chao Pinhole®, John C. Chao, DDS, MAGD",
+  "scripts": {
+    "dev": "npx --yes serve public -l 4321",
+    "astro": "astro",
+    "astro:dev": "astro dev",
+    "astro:build": "astro build",
+    "astro:preview": "astro preview",
+    "deploy": "wrangler pages deploy public --project-name=chao-pinhole"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^12.6.10",
+    "astro": "^5.14.1",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.42.0"
+  }
+}

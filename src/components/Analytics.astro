@@ -1,0 +1,43 @@
+---
+/**
+ * GA4 + WhatConverts + Meta Pixel.
+ *
+ * Ported from the WordPress original (they were injected there via the
+ * "Header Footer Code Manager" plugin). These must be present on EVERY page
+ * of the site — BaseLayout renders this component in <head> so any new page
+ * picks them up automatically.
+ *
+ * `is:inline` on every tag: Astro must emit these verbatim rather than
+ * bundling/hoisting them. The WhatConverts pair in particular is
+ * order-dependent — $wc_leads has to exist before 141394.js runs.
+ */
+---
+
+{/* Google tag (gtag.js) — GA4 */}
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-8V0B4FHSPH"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8V0B4FHSPH');
+</script>
+
+{/* WhatConverts — account 141394 */}
+<script is:inline>var $wc_load=function(a){return JSON.parse(JSON.stringify(a))},$wc_leads=$wc_leads||{doc:{url:$wc_load(document.URL),ref:$wc_load(document.referrer),search:$wc_load(location.search),hash:$wc_load(location.hash)}};</script>
+<script is:inline src="//s.ksrndkehqnwntyxlhgto.com/141394.js" defer></script>
+
+{/* Meta Pixel */}
+<script is:inline>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2717228771967714');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt="" /></noscript>

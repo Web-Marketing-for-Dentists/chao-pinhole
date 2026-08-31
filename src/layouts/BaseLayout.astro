@@ -1,0 +1,108 @@
+---
+/**
+ * BaseLayout — the shared page shell for the Astro migration.
+ *
+ * NOT YET IN USE. The live site is still the hand-written HTML in `public/`.
+ * This is the starting point for the migration described in docs/MIGRATION.md:
+ * it mirrors the <head>, header, and footer that every page in `public/`
+ * currently repeats verbatim.
+ *
+ * When a page moves to `src/pages/*.astro`, delete its `public/*.html`
+ * counterpart in the same commit so there is only ever one source of truth.
+ */
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+import ChatWidget from '../components/ChatWidget.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Path relative to the site root, e.g. "/privacy-policy.html" */
+  canonical?: string;
+  /** Legal/utility pages should stay out of the index */
+  noindex?: boolean;
+  /** The homepage uses on-page anchors; sub-pages link back to "/" */
+  homeHref?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  canonical = '/',
+  noindex = false,
+  homeHref = '/',
+  ogImage = '/assets/img/hero-bg.webp',
+} = Astro.props;
+
+const site = 'https://thepinholeclinic.com';
+const canonicalUrl = new URL(canonical, site).href;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <link rel="canonical" href={canonicalUrl} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Chao Pinhole®" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={new URL(ogImage, site).href} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#DD9933" />
+
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/img/favicon.webp" type="image/webp" />
+  <link rel="apple-touch-icon" href="/assets/img/favicon.webp" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <Analytics />
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+
+  <slot name="head" />
+</head>
+
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <Header homeHref={homeHref} />
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <Footer />
+
+  <div class="mobile-cta">
+    <a href="tel:+16265482891">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
+      Call Us
+    </a>
+    <a href={homeHref === '/' ? '#book' : '/#book'}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8v10H5V10h14z"/></svg>
+      Book Now
+    </a>
+  </div>
+
+  <slot name="dialogs" />
+
+  <ChatWidget />
+
+  <script src="/assets/js/site.js" is:inline defer></script>
+</body>
+</html>
