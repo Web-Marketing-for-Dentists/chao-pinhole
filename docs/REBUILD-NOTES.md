@@ -188,6 +188,75 @@ JavaScript into first paint. The supplied `allow` list (including `web-share`)
 and `allowfullscreen` are applied to the iframe that replaces the facade on
 click — verified.
 
+### Before / after sliders
+
+Five instances. **Which photo sits on which side is not derivable from the
+filenames** — check the rendered page, not the `src`.
+
+| Slider | Left ("Before") | Right |
+| --- | --- | --- |
+| Hero — "14 Years Later" | `ba-sharon-after.webp` | `ba-sharon-before.webp` |
+| 3-Year Case | `ba-eliza-before.webp` | `ba-eliza-after.webp` |
+| 10-Year Case | `ba-rocio-before.webp` | `ba-rocio-after.webp` |
+| 6-Year Case | `ba-rodney-before.webp` | `ba-rodney-after.webp` |
+| Symptoms | `ba-czarina-before.webp` | `ba-czarina-after.webp` |
+
+The hero looks inverted and is not. **The Sharon pair's CDN filenames are
+mislabelled at source**, and the original WordPress site compensated the same
+way — its slider markup put `Sharon-H.-14-years-after01.webp` in the
+`bafg-before-label="Before"` slot. This arrangement was confirmed on screen by
+the client. Do not "fix" it to match the filenames.
+
+The other four pairs have unambiguous names (`-before-1` vs `-35-months-after`)
+and are wired the obvious way.
+
+Watch the class name too: `.ba-after` is the *clipped overlay*, and because it
+is `position: absolute` with `width` and `left: 0` it covers the **left** half
+of the frame. The bare `<img>` underneath shows through on the right. The name
+describes layering, not chronology — reading it as chronology inverts the
+comparison, and did on four sliders until it was caught.
+
+Each slider's `alt` text describes its **side**, matching the visible label, so
+alt stays put when images are swapped.
+
+#### Idle sweep — hero only, CSS only
+
+The hero divider animates back and forth to advertise that it is draggable:
+`ba-sweep-clip` / `ba-sweep-handle`, 4s `ease-in-out` infinite — **2 seconds per
+pass**, 4s round trip. Verified by seeking the timeline: 8% at 0ms, 92% at
+2000ms, back to 8% at 4000ms, clip and handle in sync at every offset.
+
+It is **opt-in via `.ba--animated`, and only the hero carries that class.** The
+four sliders below the fold stay parked at the 50% `site.js` sets — five
+sliders animating forever is noise, and they remain fully draggable (verified
+at 20% and 75%).
+
+Two keyframe sets rather than one animated custom property, so no `@property`
+support is needed. It travels 8% → 92% rather than 0% → 100% because the handle
+is a 44px circle centred on its position; at the exact edges half of it would be
+clipped by the frame's `overflow: hidden`.
+
+Interaction handling, also pure CSS:
+
+- `:hover` (pointer devices only) → `animation-play-state: paused`, so the
+  comparison can be read.
+- `:active` and `:focus-within` → `animation: none`. Animations outrank inline
+  styles in the cascade, so dropping the animation hands control back to the
+  inline `width`/`left` that `site.js` writes — the visitor's position sticks.
+  Pressing the range focuses it, and that focus outlives the drag.
+
+**Known limitation:** pure CSS cannot remember that an interaction happened, so
+the sweep resumes if the visitor clicks away and the range loses focus. Making
+it permanent needs one line of JS (set a class on `input`), which was out of
+scope.
+
+`prefers-reduced-motion: reduce` neutralises the sweep via the global rule in
+section 2, leaving the divider at 50%.
+
+The sweep also means the range's `aria-valuenow` (50) does not track the
+animated position. That is intentional — the motion is a decorative affordance,
+and the real value only changes when someone moves it.
+
 ### Comparison table
 
 The original rendered the Pinhole-vs-grafting comparison three separate times

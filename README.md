@@ -9,11 +9,12 @@ become an Astro project without restructuring.
 ## Run it
 
 ```bash
-npx serve public -l 4321
+npx serve public -l 4326
 ```
 
-Or open `public/index.html` directly — note that absolute asset paths
-(`/assets/…`) need a server, so prefer the command above.
+Use `serve` specifically — it reproduces Cloudflare Pages' clean-URL handling
+(`/privacy-policy` resolves, `/privacy-policy.html` 301s). `python3 -m
+http.server` does not, and will 404 on every sub-page.
 
 ## Layout
 
@@ -26,7 +27,7 @@ public/                 the deployable site — this is the source of truth toda
   thank-you.html
   404.html
   robots.txt  sitemap.xml  favicon.ico
-  _headers              Cloudflare Pages: security + cache headers
+  _headers              security + cache headers (see the Cache-Control note)
   _redirects            301s from the old WordPress URLs
   assets/
     css/site.css        design tokens + every component, mobile-first
@@ -40,6 +41,7 @@ src/                    Astro scaffolding — not yet driving the build
   pages/                empty; astro build will fail until a page lands here
 
 docs/
+  DEPLOY.md             Cloudflare Pages runbook + URL/caching gotchas
   MIGRATION.md          step-by-step plan for moving to Astro
   REBUILD-NOTES.md      what changed vs. the WordPress original, and why
 
@@ -48,7 +50,7 @@ astro.config.mjs  package.json  tsconfig.json
 
 ## Deploy (Cloudflare Pages)
 
-While the site is static HTML:
+Full runbook in [docs/DEPLOY.md](docs/DEPLOY.md). In short:
 
 | Setting | Value |
 | --- | --- |
@@ -59,12 +61,23 @@ While the site is static HTML:
 npx wrangler pages deploy public --project-name=chao-pinhole
 ```
 
-`_headers` sets a one-year immutable cache on `/assets/*`, so `site.css` and
-`site.js` are linked with a `?v=N` query. **Bump that version in every HTML file
-when you change either file**, or the change won't reach returning visitors.
+Git integration needs the repo initialised and pushed first — it currently is
+not a git repo.
+
+**Pages serves HTML extensionless and 301s `/foo.html` → `/foo`.** Every link,
+canonical, `_redirects` destination and `_headers` rule here is already written
+that way. Preview locally with `npx serve public` (same clean-URL behaviour),
+**not** `python3 -m http.server`, which has none.
+
+`_headers` note: matching rules are merged and duplicate headers are joined with
+a comma, not overridden — so exactly one `Cache-Control` may match a path. HTML
+routes are listed individually. **Add a line when you add a page.**
+
+Assets are cached immutably for a year, hence the `?v=N` on the CSS/JS links.
+**Bump it in every HTML file when you change either file.** Currently `v=8`.
 
 After the Astro migration, switch the build command to `npm run astro:build`
-and the output directory to `dist`. See `docs/MIGRATION.md`.
+and the output directory to `dist`. See [docs/MIGRATION.md](docs/MIGRATION.md).
 
 ## Tracking
 

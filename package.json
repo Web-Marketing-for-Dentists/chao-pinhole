@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Static rebuild of thepinholeclinic.com — Chao Pinhole®, John C. Chao, DDS, MAGD",
+  "description": "Static rebuild of thepinholeclinic.com \u2014 Chao Pinhole\u00ae, John C. Chao, DDS, MAGD",
   "scripts": {
-    "dev": "npx --yes serve public -l 4321",
+    "dev": "npx --yes serve public -l 4326",
     "astro": "astro",
     "astro:dev": "astro dev",
     "astro:build": "astro build",
     "astro:preview": "astro preview",
-    "deploy": "wrangler pages deploy public --project-name=chao-pinhole"
+    "deploy": "npm run clean && npx wrangler pages deploy public --project-name=chao-pinhole",
+    "clean": "find public -name '.DS_Store' -delete"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

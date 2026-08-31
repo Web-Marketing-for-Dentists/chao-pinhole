@@ -485,6 +485,10 @@ button { font: inherit; color: inherit; }
   display: block;
   pointer-events: none;
 }
+/* The clipped overlay. `width` with `left: 0` means this covers the LEFT half
+   of the frame — so it holds the BEFORE photo, and the bare <img> underneath
+   shows through on the RIGHT as the AFTER photo. The class name is about
+   layering, not chronology; getting that backwards inverts the comparison. */
 .ba-after {
   position: absolute;
   inset: 0;
@@ -525,6 +529,49 @@ button { font: inherit; color: inherit; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='%232A2B2B'%3E%3Cpath d='M9.5 6 4 12l5.5 6v-4h5v4l5.5-6-5.5-6v4h-5z'/%3E%3C/svg%3E");
   box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
 }
+
+/* ---- Idle sweep -----------------------------------------------------------
+   Advertises that the divider is draggable. One pass left -> right takes 2s,
+   so the full there-and-back cycle is 4s.
+
+   Two keyframe sets rather than one animated custom property, so this needs no
+   @property support; identical duration and easing keep them in lockstep.
+
+   Animations outrank inline styles in the cascade, so these override the
+   width/left that site.js writes on load — and `animation: none` on
+   interaction hands control straight back to it. No JS involved either way.
+
+   It stops short of 0%/100% because the 44px handle is centred on its
+   position: at the exact edges half of it would be clipped by the frame. */
+@keyframes ba-sweep-clip {
+  0%, 100% { width: 8%; }
+  50%      { width: 92%; }
+}
+@keyframes ba-sweep-handle {
+  0%, 100% { left: 8%; }
+  50%      { left: 92%; }
+}
+
+/* Opt-in, via .ba--animated. Only the hero slider sweeps: it is the one on
+   screen at load, where the hint is worth spending motion on. The four below
+   the fold stay parked at the 50% site.js sets — five sliders animating
+   forever is noise, and they are just as draggable without it. */
+.ba--animated .ba-after  { animation: ba-sweep-clip   4s ease-in-out infinite; }
+.ba--animated .ba-handle { animation: ba-sweep-handle 4s ease-in-out infinite; }
+
+/* Pause under the cursor so the comparison can actually be read... */
+@media (hover: hover) {
+  .ba--animated:hover .ba-after,
+  .ba--animated:hover .ba-handle { animation-play-state: paused; }
+}
+
+/* ...and drop the animation entirely once the visitor takes hold of it, so
+   their position sticks. Pressing the range focuses it, and that focus
+   outlives the drag, so :focus-within keeps the sweep off afterwards. */
+.ba--animated:active .ba-after,
+.ba--animated:active .ba-handle,
+.ba--animated:focus-within .ba-after,
+.ba--animated:focus-within .ba-handle { animation: none; }
 
 .ba-range {
   position: absolute;

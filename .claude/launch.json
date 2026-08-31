@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "chao-pinhole",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4321", "--directory", "public"],
-      "port": 4321
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "public", "-l", "4326"],
+      "port": 4326
     }
   ]
 }

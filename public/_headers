@@ -1,3 +1,15 @@
+# Cloudflare Pages headers.
+#
+# IMPORTANT: when several rules match one request, Pages applies ALL of them,
+# and a header set twice is JOINED WITH A COMMA rather than overridden. So a
+# Cache-Control on /* would concatenate with the one on /assets/* and produce
+# garbage. Exactly one Cache-Control rule may match any given path — hence the
+# HTML routes are listed individually below rather than caught by a wildcard.
+#
+# Paths are matched against the REQUEST URL. Pages serves HTML extensionless
+# (/privacy-policy, not /privacy-policy.html), so these rules must be written
+# without the .html.
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
@@ -5,8 +17,21 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
+# Fingerprinted by the ?v=N query on the CSS/JS links — bump that on change.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-/*.html
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy-policy
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms-and-conditions
+  Cache-Control: public, max-age=0, must-revalidate
+
+/disclaimer
+  Cache-Control: public, max-age=0, must-revalidate
+
+/thank-you
   Cache-Control: public, max-age=0, must-revalidate

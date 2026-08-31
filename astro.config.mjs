@@ -23,7 +23,12 @@ export default defineConfig({
   output: 'static',
   // adapter: cloudflare(),
   build: {
-    format: 'file', // emit /privacy-policy.html, matching the current URLs
+    // 'file' emits privacy-policy.html, which Cloudflare Pages then serves at
+    // the extensionless /privacy-policy (it 301s /foo.html -> /foo itself).
+    // That matches how the hand-written site is already linked, so URLs do not
+    // move during the migration. Do not switch this to 'directory' without
+    // adding redirects — it would change every URL to /privacy-policy/.
+    format: 'file',
   },
   trailingSlash: 'ignore',
   compressHTML: true,
