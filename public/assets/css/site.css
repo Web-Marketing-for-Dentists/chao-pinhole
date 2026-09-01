@@ -53,6 +53,9 @@
   /* Height of the fixed mobile call/book bar. Also used to lift the chat
      widget clear of it — keep the two in sync. */
   --mobile-cta-h: 54px;
+
+  /* Animated CTA outline. Symmetrical so the 0%->100% sweep loops seamlessly. */
+  --glow-gradient: linear-gradient(90deg,#DD9933,#F7C765,#FFF3CF,#F7C765,#DD9933);
 }
 
 /* --------------------------------------------------------------------------
@@ -224,6 +227,50 @@ button { font: inherit; color: inherit; }
 }
 .btn-row--center { justify-content: center; }
 
+/* ---- Animated gold CTA -----------------------------------------------------
+   Two background layers: a solid fill clipped to the padding box, and the
+   gradient clipped to the border box, showing through the transparent border.
+   That gives a real gradient outline without a wrapper or a pseudo-element
+   fighting the button's own background for stacking order.
+
+   Border width is left at the .btn value of 2px on purpose — glow and non-glow
+   buttons sit side by side in the same row, and changing it would make them
+   different heights.
+
+   The hover rule has to restate `background`, because .btn:hover sets the
+   shorthand and would otherwise flatten both layers back to a single colour. */
+.btn--glow,
+.btn--glow:hover,
+.btn--glow:focus-visible {
+  --glow-fill: var(--btn-bg);
+  background:
+    linear-gradient(var(--glow-fill), var(--glow-fill)) padding-box,
+    var(--glow-gradient) border-box;
+  background-size: 100% 100%, 200% 100%;
+  background-repeat: no-repeat;
+  animation: btn-glow-shift 3s linear infinite,
+             btn-glow-pulse 2.4s ease-in-out infinite;
+}
+.btn--glow:hover { --glow-fill: color-mix(in srgb, var(--btn-bg) 86%, #000); }
+
+/* Ghost buttons have a transparent fill, so the gradient ring sits on whatever
+   is behind them — keep that, just darken slightly on hover. */
+.btn--ghost.btn--glow:hover { --glow-fill: rgba(255, 255, 255, .14); }
+
+/* .btn--ghost sets border-color: currentColor, which would paint over the
+   gradient border-box layer. The ring has to win. */
+.btn--ghost.btn--glow { border-color: transparent; }
+
+@keyframes btn-glow-shift {
+  from { background-position: 0 0,   0% 50%; }
+  to   { background-position: 0 0, 100% 50%; }
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(221, 153, 51, .35), 0 0 0 1px rgba(221, 153, 51, .22); }
+  50%      { box-shadow: 0 0 26px rgba(247, 199, 101, .62), 0 0 0 3px rgba(247, 199, 101, .30); }
+}
+
 /* --------------------------------------------------------------------------
    6. Header
    -------------------------------------------------------------------------- */
@@ -297,30 +344,55 @@ button { font: inherit; color: inherit; }
 .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Primary nav — off-canvas on mobile, gold bar on desktop */
+/* Primary nav — a popup panel at EVERY width, opened by the hamburger.
+   Anchored to .site-header (position: sticky already establishes a containing
+   block for the absolute panel). A click-catching backdrop sits behind it so
+   tapping away closes the menu; site.js also closes on link click and Escape. */
 .primary-nav {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 101;
   background: var(--gold);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .28);
+  max-height: calc(100dvh - var(--header-h) - 1rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   display: none;
 }
 .primary-nav[data-open="true"] { display: block; }
 
 .primary-nav ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0 auto;
+  padding: .35rem 0;
+  max-width: var(--shell);
 }
 .primary-nav a {
   display: block;
-  padding: .85rem var(--gutter);
+  padding: .9rem var(--gutter);
   color: var(--white);
-  font-size: .9375rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   text-decoration: none;
   text-transform: capitalize;
   border-bottom: 1px solid rgba(255, 255, 255, .22);
 }
+.primary-nav li:last-child a { border-bottom: 0; }
 .primary-nav a:hover,
-.primary-nav a[aria-current="page"] { background: rgba(0, 0, 0, .14); }
+.primary-nav a[aria-current="page"] { background: rgba(0, 0, 0, .16); }
+
+/* Backdrop — only rendered while the menu is open. */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(9, 11, 11, .45);
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
 
 /* --------------------------------------------------------------------------
    7. Hero
@@ -681,6 +753,56 @@ button { font: inherit; color: inherit; }
 .carousel-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
 .carousel-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
+/* ---- Before & After gallery ------------------------------------------------
+   Each source image is a 695x250 panorama with the before/after pair, dates and
+   captions already baked in. The old 4-across carousel rendered them ~264px
+   wide, which made that baked-in detail unreadable, and hid half the cases
+   behind a horizontal scroll with no affordance.
+
+   A two-column grid gives each one ~540px — close to native size — and puts
+   every case on screen without scrolling sideways. */
+.ba-gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+}
+
+.ba-gallery figure {
+  margin: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+
+.ba-gallery img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ba-gallery figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .35rem 1rem;
+  padding: .75rem 1rem;
+  border-top: 1px solid var(--line);
+  font-size: .875rem;
+}
+.ba-gallery figcaption b {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.ba-gallery figcaption span { color: var(--muted); font-variant-numeric: tabular-nums; }
+
 /* --------------------------------------------------------------------------
    13. Patient spotlight card
    -------------------------------------------------------------------------- */
@@ -841,7 +963,39 @@ button { font: inherit; color: inherit; }
   align-content: start;
 }
 .quote-card .stars { font-size: 1rem; }
-.quote-source { width: 28px; height: 28px; }
+
+/* Google review cards */
+.quote-grid { list-style: none; padding: 0; }
+
+.quote-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--mist);
+}
+.quote-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 0;
+}
+.quote-card blockquote p { margin-bottom: .75rem; }
+.quote-card blockquote b { color: var(--ink); font-weight: 700; }
+
+.quote-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 44px;
+  margin-top: auto;
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-decoration: none;
+}
+.quote-link:hover { text-decoration: underline; }
+.quote-link img { flex: none; }
 .quote-card blockquote { margin: 0; }
 .quote-card blockquote p:first-child { font-weight: 600; }
 .quote-card cite {
@@ -1293,8 +1447,8 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 
   body { padding-bottom: 0; }
   .mobile-cta,
-  .header-callbar,
-  .nav-toggle { display: none; }
+  .header-callbar { display: none; }
+  /* .nav-toggle stays visible — the menu is a popup at every width now. */
 
   /* No bar on desktop — hand the chat widget its own corner back */
   #apexchat_prechat_invitation_wrapper,
@@ -1323,20 +1477,15 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 
   .header-actions .btn { display: inline-flex; }
 
-  .primary-nav { display: block; }
-  .primary-nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: var(--shell);
-    margin-inline: auto;
+  /* Panel is narrower and right-aligned on desktop rather than full-bleed. */
+  .primary-nav {
+    left: auto;
+    width: min(340px, 92vw);
+    border-radius: 0 0 var(--radius) var(--radius);
+    overflow: hidden;
   }
-  .primary-nav a {
-    padding: .8rem .85rem;
-    font-size: .8125rem;
-    border-bottom: 0;
-    white-space: nowrap;
-  }
+  .primary-nav ul { padding: .25rem 0; }
+  .primary-nav a { padding: .85rem 1.25rem; }
 
   .hero {
     background-image: url("../img/hero-bg.webp");
@@ -1348,6 +1497,7 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
   .short-frame { max-width: none; margin-inline: 0; }
 
   .case-grid   { grid-template-columns: repeat(3, 1fr); }
+  .ba-gallery  { grid-template-columns: repeat(2, 1fr); }
   .carousel-track { --slide-w: 31%; }
   .contact-grid { grid-template-columns: 1fr 1fr; align-items: start; }
 
@@ -1371,8 +1521,7 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 
 /* ≥ 1100px — final polish */
 @media (min-width: 68.75em) {
-  .quote-grid  { grid-template-columns: repeat(4, 1fr); }
-  .primary-nav a { padding: .8rem 1.1rem; font-size: .875rem; }
+  .quote-grid  { grid-template-columns: repeat(3, 1fr); }
   .carousel-track { --slide-w: 23.5%; }
 }
 

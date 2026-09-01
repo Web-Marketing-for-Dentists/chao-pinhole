@@ -26,21 +26,33 @@
     var nav    = $('#primary-nav');
     if (!toggle || !nav) return;
 
+    var backdrop = null;
+
     function setOpen(open) {
       toggle.setAttribute('aria-expanded', String(open));
       nav.setAttribute('data-open', String(open));
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+
+      if (open && !backdrop) {
+        backdrop = document.createElement('button');
+        backdrop.type = 'button';
+        backdrop.className = 'nav-backdrop';
+        backdrop.setAttribute('aria-label', 'Close menu');
+        backdrop.addEventListener('click', function () { setOpen(false); toggle.focus(); });
+        document.body.appendChild(backdrop);
+      } else if (!open && backdrop) {
+        backdrop.remove();
+        backdrop = null;
+      }
     }
 
     on(toggle, 'click', function () {
       setOpen(toggle.getAttribute('aria-expanded') !== 'true');
     });
 
-    // Close after tapping a link (single-page anchors)
+    // The menu is a popup at every width now, so always close after a choice.
     $$('a', nav).forEach(function (a) {
-      on(a, 'click', function () {
-        if (window.matchMedia('(max-width: 56.24em)').matches) setOpen(false);
-      });
+      on(a, 'click', function () { setOpen(false); });
     });
 
     on(document, 'keydown', function (e) {
@@ -50,11 +62,8 @@
       }
     });
 
-    // Reset state when crossing the desktop breakpoint
-    var mq = window.matchMedia('(min-width: 56.25em)');
-    var reset = function () { if (mq.matches) setOpen(false); };
-    if (mq.addEventListener) mq.addEventListener('change', reset);
-    else if (mq.addListener) mq.addListener(reset);
+    // Keep the panel anchored correctly if the header height changes.
+    on(window, 'resize', function () { if (backdrop) setOpen(false); });
   }
 
   /* ------------------------------------------------------------------------
