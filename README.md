@@ -32,7 +32,7 @@ public/                 the deployable site — this is the source of truth toda
   assets/
     css/site.css        design tokens + every component, mobile-first
     js/site.js          nav, sliders, carousels, tabs, dialog, countdown, scrollspy
-    img/                33 images
+    img/                30 images
     video/              2 videos
 
 src/                    Astro scaffolding — not yet driving the build
@@ -74,7 +74,7 @@ a comma, not overridden — so exactly one `Cache-Control` may match a path. HTM
 routes are listed individually. **Add a line when you add a page.**
 
 Assets are cached immutably for a year, hence the `?v=N` on the CSS/JS links.
-**Bump it in every HTML file when you change either file.** Currently `v=8`.
+**Bump it in every HTML file when you change either file.** Currently `v=11`.
 
 After the Astro migration, switch the build command to `npm run astro:build`
 and the output directory to `dist`. See [docs/MIGRATION.md](docs/MIGRATION.md).

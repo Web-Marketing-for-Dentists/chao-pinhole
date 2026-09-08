@@ -376,7 +376,6 @@ button { font: inherit; color: inherit; }
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  text-transform: capitalize;
   border-bottom: 1px solid rgba(255, 255, 255, .22);
 }
 .primary-nav li:last-child a { border-bottom: 0; }

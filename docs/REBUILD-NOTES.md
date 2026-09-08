@@ -54,14 +54,23 @@ The rebuilt nav therefore links to the on-page sections that actually exist:
 | Nav item | Target |
 | --- | --- |
 | Home | `#top` |
-| Pinhole Gum Rejuvenation | `#pinhole` |
-| Gum Recession | `#gum-recession` |
+| Benefits of Pinhole | `#benefits` (the Pinhole vs. grafting comparison table) |
 | Research | `#research` |
 | Before & After | `#gallery` |
 | Testimonials | `#testimonials` |
+| As Seen On TV | `#as-seen-on` (the media-features tabs) |
 | Meet the Doctor | `#doctor` |
 | FAQ | `#faq` |
-| Contact Us | `#contact` |
+
+**It is a popup at every width**, opened by the hamburger — there is no
+horizontal nav bar on desktop any more. The panel is full-bleed below 900px and
+a 340px right-aligned card above it, anchored to the bottom of the sticky
+header. A generated `.nav-backdrop` button sits behind it, so tapping away
+closes the menu; `site.js` also closes on link click (at every width now) and on
+Escape.
+
+`text-transform: capitalize` was removed from the nav links — it was rendering
+"Benefits **Of** Pinhole" and "Meet **The** Doctor".
 
 **Three original items have no content anywhere on the site and were left
 out: Technology, Financing, and Office Tour.** If those pages are wanted, they
@@ -256,6 +265,73 @@ section 2, leaving the divider at 50%.
 The sweep also means the range's `aria-valuenow` (50) does not track the
 animated position. That is intentional — the motion is a decorative affordance,
 and the real value only changes when someone moves it.
+
+### Animated gold CTAs
+
+Every "Call Us" and "Book Your Appointment" button carries `.btn--glow`: a gold
+gradient outline that shifts, plus a pulsing glow. 13 buttons in total.
+
+The outline is two background layers rather than a pseudo-element — a solid fill
+clipped to the padding box, and `--glow-gradient` clipped to the border box,
+showing through the transparent 2px border. No wrapper, and nothing fighting the
+button's own background for stacking order.
+
+Three things that are load-bearing:
+
+- **Border width stays at the `.btn` value of 2px.** Glow and non-glow buttons
+  sit in the same rows; changing it would make them different heights.
+- **The hover rule restates `background`.** `.btn:hover` sets the shorthand and
+  would otherwise flatten both layers back to one colour, killing the ring.
+- **`.btn--ghost.btn--glow` forces `border-color: transparent`**, because
+  `.btn--ghost` sets `currentColor` and would paint over the gradient.
+
+Timing verified by seeking both timelines: `btn-glow-shift` 3s linear sweeps
+background-position 0% → 100% (the gradient is symmetrical, so it loops with no
+jump); `btn-glow-pulse` 2.4s ease-in-out takes the box-shadow from
+`10px / .35` to `26px / .62` and back.
+
+The header's own phone and Book buttons were deliberately **left un-glowed** —
+the header is sticky, and a permanently animating element pinned to the top of
+every screen is a lot. Easy to extend if wanted: add `btn--glow` to those two.
+
+`prefers-reduced-motion` neutralises both animations via the global rule,
+leaving a static gradient ring.
+
+### Before & After gallery
+
+Five cases — Rocio, John, Sharon, Lynda, Cynthia. **Ceasar was removed** at the
+client's request (it was `gallery-04.webp`, a 13-year upper-arch result).
+
+It was a horizontal scroll carousel showing four at a time; it is now a grid:
+one column on mobile, two from 900px. Three reasons:
+
+1. Each source image is a **695x250 panorama** with the before/after pair,
+   dates and patient name already baked in. The carousel rendered them ~264px
+   wide, which made all of that unreadable. The grid gives each ~540px.
+2. Horizontal scroll hid the majority of cases behind an affordance people miss.
+3. Names and dates are now real `<figcaption>` text rather than only pixels
+   inside a JPEG, so they are selectable and available to screen readers.
+
+The separate five-across vertical case carousel that used to sit under the
+3/10/6-year sliders was **removed entirely**, along with its five images.
+
+### Google reviews
+
+The four original testimonials were replaced with three current Google reviews
+(Scotch Crisostomo, Pearson Nibley, Ginger de Paris), each with an avatar, the
+client-supplied bold emphasis preserved, and a "View review on Google" link out
+to the specific review.
+
+Avatars were supplied as 450x450 PNGs at 231-328 KB each; re-encoded to 160px
+webp at ~5-6 KB. The grid is 1 / 2 / 3 columns.
+
+The "View more reviews" dialog with the 14 older reviews was **kept** — it was
+not part of the replacement request, and it is additional social proof.
+
+**One thing to check:** Pearson's review says "the photos to prove it below!"
+and describes a top and bottom row of photos. Those photos live in his Google
+review, not on this page, so on-site that sentence points at nothing. The text
+is reproduced verbatim as supplied. Either trim that clause or add his photos.
 
 ### Comparison table
 
