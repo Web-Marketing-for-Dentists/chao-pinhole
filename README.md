@@ -74,7 +74,7 @@ a comma, not overridden — so exactly one `Cache-Control` may match a path. HTM
 routes are listed individually. **Add a line when you add a page.**
 
 Assets are cached immutably for a year, hence the `?v=N` on the CSS/JS links.
-**Bump it in every HTML file when you change either file.** Currently `v=13`.
+**Bump it in every HTML file when you change either file.** Currently `v=14`.
 
 After the Astro migration, switch the build command to `npm run astro:build`
 and the output directory to `dist`. See [docs/MIGRATION.md](docs/MIGRATION.md).

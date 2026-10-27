@@ -52,7 +52,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 
-<link rel="stylesheet" href="/assets/css/site.css?v=13">
+<link rel="stylesheet" href="/assets/css/site.css?v=14">
 
 <script type="application/ld+json">
 {
@@ -323,14 +323,25 @@
       <p class="eyebrow center">What is</p>
       <h2 id="pinhole-h" class="display center">Pinhole Gum Rejuvenation®?</h2>
 
-      <div class="video-frame" style="margin:1.75rem 0 2rem">
-        <video controls playsinline preload="none"
-               poster="/assets/img/what-is-pgr-bg.webp"
-               style="width:100%;height:100%;object-fit:cover">
-          <source src="/assets/video/pst-animation.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+      <div class="video-frame explainer-video">
+        <button class="yt-facade explainer-play" type="button"
+                data-video="khOo5Csl82M"
+                data-embed-src="https://www.youtube.com/embed/khOo5Csl82M?si=rdxg82sR-augX1h6"
+                data-title="Chao Pinhole® Surgical Technique Explained"
+                aria-label="Play video: Chao Pinhole® Surgical Technique Explained"
+                aria-describedby="explainer-caption">
+          <img src="/assets/img/chao-pinhole-explained-thumbnail.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+        </button>
+        <noscript>
+          <style>#pinhole .explainer-play { display: none; }</style>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/khOo5Csl82M?si=rdxg82sR-augX1h6"
+                  title="Chao Pinhole® Surgical Technique Explained" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+        </noscript>
       </div>
+      <p class="visually-hidden" id="explainer-caption">Practiced by 4,000+ dentists internationally.</p>
+      <p class="explainer-fallback"><a href="https://www.youtube.com/watch?v=khOo5Csl82M" target="_blank" rel="noopener">Watch on YouTube<span class="visually-hidden"> (opens in a new tab)</span></a></p>
 
       <h3 class="center" style="font-family:var(--font-body);font-weight:700;font-size:var(--fs-eyebrow)">
         No Grafting, No Scalpels, Faster Recovery
@@ -1190,7 +1201,7 @@
 <!-- SellWithChat live chat widget (carries its own CTA) -->
 <script src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
 
-<script src="/assets/js/site.js?v=13" defer></script>
+<script src="/assets/js/site.js?v=14" defer></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

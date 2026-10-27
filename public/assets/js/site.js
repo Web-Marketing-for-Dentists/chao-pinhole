@@ -191,10 +191,16 @@
         var id = btn.getAttribute('data-video');
         if (!id) return;
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        var embedSrc = btn.getAttribute('data-embed-src');
+        iframe.src = embedSrc
+          ? embedSrc + '&autoplay=1&rel=0'
+          : 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
         iframe.title = btn.getAttribute('data-title') || 'Video';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.width = '560';
+        iframe.height = '315';
         iframe.loading = 'lazy';
         btn.replaceWith(iframe);
       });
