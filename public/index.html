@@ -52,7 +52,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 
-<link rel="stylesheet" href="/assets/css/site.css?v=12">
+<link rel="stylesheet" href="/assets/css/site.css?v=13">
 
 <script type="application/ld+json">
 {
@@ -146,7 +146,7 @@
       <li><a href="#no-grafting">No Grafting, No Sutures</a></li>
       <li><a href="#benefits">Benefits of Pinhole</a></li>
       <li><a href="#research">Research</a></li>
-      <li><a href="#gallery">Before &amp; After</a></li>
+      <li><a href="#results">Before &amp; After</a></li>
       <li><a href="#testimonials">Testimonials</a></li>
       <li><a href="#social">Pinhole on TikTok</a></li>
       <li><a href="#as-seen-on">As Seen On TV</a></li>
@@ -164,7 +164,6 @@
   <section class="hero">
     <div class="shell hero-grid">
       <div>
-        <p class="hero-credentials">Invented by Dr. John Chao · Alhambra, CA</p>
         <h1>Pinhole Gum Rejuvenation®</h1>
         <p class="hero-sub">Treat gum recession.<em>Without gum grafting.</em></p>
         <p class="hero-intro">Scalpel-free, suture-free care that uses your own gum tissue. Discover a different way to restore your gumline.</p>
@@ -179,19 +178,16 @@
         <h2>Pinhole Patient</h2>
         <p class="hero-card-note">One patient’s gumline, 14 years later.<br>Individual results may vary.</p>
 
-        <div class="ba ba--animated" data-ba>
-          <div class="ba-frame">
-            <img src="/assets/img/ba-sharon-before.webp" alt="The same gum line 14 years after Pinhole Gum Rejuvenation" width="500" height="325" loading="eager">
-            <div class="ba-after">
-              <img src="/assets/img/ba-sharon-after.webp" alt="Gum line before Pinhole Gum Rejuvenation, showing recession" width="500" height="325" loading="eager">
-            </div>
-            <span class="ba-label ba-label--before">Before</span>
-            <span class="ba-label ba-label--after">14 Years Later</span>
-            <div class="ba-handle"></div>
-            <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5"
-                   aria-label="Reveal the before and after photo" aria-valuetext="Comparison position">
+        <div class="photo-comparison" role="group" aria-label="Before and after Pinhole Gum Rejuvenation">
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-sharon-after.webp" alt="Gumline before Pinhole Gum Rejuvenation, showing recession" width="500" height="325" loading="eager" decoding="async">
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-sharon-before.webp" alt="The same gumline 14 years after Pinhole Gum Rejuvenation" width="500" height="325" loading="eager" decoding="async">
+              <figcaption>After</figcaption>
+            </figure>
           </div>
-        </div>
 
         <ul class="checklist">
           <li><svg viewBox="0 0 512 512" aria-hidden="true"><path d="M173.9 439.4 7.5 273c-10-10-10-26.2 0-36.2l36.2-36.2c10-10 26.2-10 36.2 0L192 312.7 432.1 72.6c10-10 26.2-10 36.2 0l36.2 36.2c10 10 10 26.2 0 36.2l-294.4 294.4c-10 10-26.2 10-36.2 0z"/></svg>Minimally Invasive</li>
@@ -244,96 +240,78 @@
   <!-- ====================================================================
        Inventor strip
        ==================================================================== -->
-  <section class="section--mist">
-    <div class="shell inventor">
-      <div class="inventor-video">
-        <!-- Click-to-load facade, same as the media-features tabs: nothing is
-             requested from youtube.com until the visitor presses play. This
-             section is near the fold, so a live iframe here would cost ~1 MB of
-             third-party JS on first paint. -->
-        <div class="short-frame">
-          <button class="yt-facade" type="button"
-                  data-video="qs59Wb890WE"
-                  data-title="Dr. John Chao on the Pinhole® Surgical Technique"
-                  aria-label="Play video: Dr. John Chao on the Pinhole® Surgical Technique"
-                  style="background-image:url('/assets/img/dr-chao-short-poster.webp')"></button>
-        </div>
-      </div>
-      <div>
-        <h2>John Chao, DDS</h2>
+  <section class="section--mist inventor-strip" aria-labelledby="inventor-h">
+    <div class="shell inventor inventor--compact">
+      <div class="inventor-identity">
+        <h2 id="inventor-h">John Chao, DDS</h2>
         <p class="inventor-role">Inventor of the Pinhole® Technique</p>
-        <p class="inventor-stat">
-          This specialized procedure is practiced by <b>4,000&nbsp;Dentists</b>
-          including <b>1,000+&nbsp;Periodontists</b> and <b>Specialists</b>
-        </p>
-        <div class="cta-band" style="justify-items:start;text-align:left;padding-block:1.25rem 0">
-          <p>Learn if Pinhole Gum Rejuvenation is right for you!</p>
-          <div class="btn-row">
-            <a class="btn btn--rose btn--glow" href="tel:+16265482891">Call Us: (626) 548-2891</a>
-            <a class="btn btn--glow" href="#book">Book Your Appointment</a>
-          </div>
-        </div>
       </div>
+      <p class="inventor-stat">Practiced by <b>4,000 dentists</b>, including <b>1,000+ periodontists and specialists</b>.</p>
     </div>
   </section>
 
   <!-- ====================================================================
        Long-term cases
        ==================================================================== -->
-  <section class="section section--mist" aria-labelledby="cases-h">
+  <section class="section results-section" id="results" aria-labelledby="cases-h">
     <div class="shell">
-      <h2 id="cases-h" class="visually-hidden">Long-term Pinhole® cases</h2>
-
+      <header class="results-heading">
+        <p class="eyebrow">Long-term Pinhole® results</p>
+        <h2 id="cases-h" class="display">Before &amp; After</h2>
+        <p class="results-intro">Real patient gumlines, years after treatment by Dr. John Chao. Individual results may vary.</p>
+      </header>
       <div class="case-grid">
-        <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-eliza-after.webp" alt="Eliza T. three years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-eliza-before.webp" alt="Eliza T. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Eliza T. — reveal the before and after photo">
-            </div>
+        <article class="result-card">
+          <header class="result-card-heading">
+            <h3>Eliza T.</h3>
+            <p class="case-time">3-year follow-up</p>
+          </header>
+          <div class="photo-comparison" role="group" aria-label="Before and after Pinhole Gum Rejuvenation">
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-eliza-before.webp" alt="Eliza T. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-eliza-after.webp" alt="Eliza T. at 3-year follow-up after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>After</figcaption>
+            </figure>
           </div>
-          <figcaption class="ba-caption">3-Year Case</figcaption>
-        </figure>
+        </article>
 
-        <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-rocio-after.webp" alt="Rocio K. ten years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-rocio-before.webp" alt="Rocio K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Rocio K. — reveal the before and after photo">
-            </div>
+        <article class="result-card">
+          <header class="result-card-heading">
+            <h3>Rocio K.</h3>
+            <p class="case-time">10-year follow-up</p>
+          </header>
+          <div class="photo-comparison" role="group" aria-label="Before and after Pinhole Gum Rejuvenation">
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-rocio-before.webp" alt="Rocio K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-rocio-after.webp" alt="Rocio K. at 10-year follow-up after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>After</figcaption>
+            </figure>
           </div>
-          <figcaption class="ba-caption">10-Year Case</figcaption>
-        </figure>
+        </article>
 
-        <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-rodney-after.webp" alt="Rodney K. six years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-rodney-before.webp" alt="Rodney K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Rodney K. — reveal the before and after photo">
-            </div>
+        <article class="result-card">
+          <header class="result-card-heading">
+            <h3>Rodney K.</h3>
+            <p class="case-time">6-year follow-up</p>
+          </header>
+          <div class="photo-comparison" role="group" aria-label="Before and after Pinhole Gum Rejuvenation">
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-rodney-before.webp" alt="Rodney K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-rodney-after.webp" alt="Rodney K. at 6-year follow-up after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>After</figcaption>
+            </figure>
           </div>
-          <figcaption class="ba-caption">6-Year Case</figcaption>
-        </figure>
+        </article>
       </div>
-
     </div>
   </section>
 
@@ -497,18 +475,16 @@
        ==================================================================== -->
   <section class="section section--mist" aria-labelledby="symptoms-h">
     <div class="shell" style="display:grid;gap:2rem">
-      <div class="ba" data-ba>
-        <div class="ba-frame">
-          <img src="/assets/img/ba-czarina-after.webp" alt="The same gum line after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-          <div class="ba-after">
-            <img src="/assets/img/ba-czarina-before.webp" alt="Gum recession before treatment" width="800" height="520" loading="lazy">
+      <div class="photo-comparison" role="group" aria-label="Before and after Pinhole Gum Rejuvenation">
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-czarina-before.webp" alt="Gum recession before treatment" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>Before</figcaption>
+            </figure>
+            <figure class="comparison-photo">
+              <img src="/assets/img/ba-czarina-after.webp" alt="The same gumline after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy" decoding="async">
+              <figcaption>After</figcaption>
+            </figure>
           </div>
-          <span class="ba-label ba-label--before">Before</span>
-          <span class="ba-label ba-label--after">After</span>
-          <div class="ba-handle"></div>
-          <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Reveal the before and after photo">
-        </div>
-      </div>
 
       <div>
         <p class="eyebrow">Symptoms of</p>
@@ -585,7 +561,7 @@
        ==================================================================== -->
   <section class="section" id="gallery" aria-labelledby="gallery-h">
     <div class="shell">
-      <h2 id="gallery-h" class="display center" style="margin-bottom:1.75rem">Before &amp; After</h2>
+      <h2 id="gallery-h" class="display center" style="margin-bottom:1.75rem">More Before &amp; After Results</h2>
 
       <p class="center lede" style="max-width:62ch;margin:0 auto 2rem">
         Each photo shows the same patient before treatment and again years later.
@@ -595,31 +571,31 @@
       <ul class="ba-gallery">
         <li>
           <figure>
-            <img src="/assets/img/gallery-01.webp" alt="Rocio — gum line before Pinhole® treatment in December 2013 and after, in March 2016" width="695" height="250" loading="lazy" decoding="async">
+            <div class="gallery-comparison"><img src="/assets/img/gallery-01.webp" alt="Rocio — gum line before Pinhole® treatment in December 2013 and after, in March 2016" width="695" height="250" loading="lazy" decoding="async"><span class="gallery-photo-label" aria-hidden="true">Before</span><span class="gallery-photo-label gallery-photo-label--after" aria-hidden="true">After</span></div>
             <figcaption><b>Rocio</b> <span>Before 12/10/13 &middot; After 3/19/16</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-02.webp" alt="John — gum line before Pinhole® treatment in February 2013 and after, in November 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="gallery-comparison"><img src="/assets/img/gallery-02.webp" alt="John — gum line before Pinhole® treatment in February 2013 and after, in November 2014" width="695" height="250" loading="lazy" decoding="async"><span class="gallery-photo-label" aria-hidden="true">Before</span><span class="gallery-photo-label gallery-photo-label--after" aria-hidden="true">After</span></div>
             <figcaption><b>John</b> <span>Before 2/13/13 &middot; After 11/8/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-03.webp" alt="Sharon — gum line before Pinhole® treatment in March 2011 and after, in September 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="gallery-comparison"><img src="/assets/img/gallery-03.webp" alt="Sharon — gum line before Pinhole® treatment in March 2011 and after, in September 2014" width="695" height="250" loading="lazy" decoding="async"><span class="gallery-photo-label" aria-hidden="true">Before</span><span class="gallery-photo-label gallery-photo-label--after" aria-hidden="true">After</span></div>
             <figcaption><b>Sharon</b> <span>Before 3/29/11 &middot; After 9/13/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-05.webp" alt="Lynda — gum line before Pinhole® treatment in March 2007 and after, in October 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="gallery-comparison"><img src="/assets/img/gallery-05.webp" alt="Lynda — gum line before Pinhole® treatment in March 2007 and after, in October 2014" width="695" height="250" loading="lazy" decoding="async"><span class="gallery-photo-label" aria-hidden="true">Before</span><span class="gallery-photo-label gallery-photo-label--after" aria-hidden="true">After</span></div>
             <figcaption><b>Lynda</b> <span>Before 3/15/07 &middot; After 10/25/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-06.webp" alt="Cynthia — gum line before Pinhole® treatment in March 2005 and after, in July 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="gallery-comparison"><img src="/assets/img/gallery-06.webp" alt="Cynthia — gum line before Pinhole® treatment in March 2005 and after, in July 2014" width="695" height="250" loading="lazy" decoding="async"><span class="gallery-photo-label" aria-hidden="true">Before</span><span class="gallery-photo-label gallery-photo-label--after" aria-hidden="true">After</span></div>
             <figcaption><b>Cynthia</b> <span>Before 3/31/05 &middot; After 7/30/14</span></figcaption>
           </figure>
         </li>
@@ -1214,7 +1190,7 @@
 <!-- SellWithChat live chat widget (carries its own CTA) -->
 <script src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
 
-<script src="/assets/js/site.js?v=12" defer></script>
+<script src="/assets/js/site.js?v=13" defer></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

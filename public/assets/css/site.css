@@ -1502,7 +1502,6 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 .hero .hero-card h2 { color: var(--ink); }
 .hero .hero-card .hero-card-note { color: var(--muted); }
 .hero-card .checklist { color: var(--ink); }
-.hero .hero-credentials { font-size: .6875rem; letter-spacing: .09em; text-transform: uppercase; font-weight: 700; color: #85541b; margin-bottom: .8rem; }
 @media (max-width: 39.99em) {
   .treatment-action .btn-row { flex-direction: column; align-items: stretch; gap: .35rem; }
   .treatment-call { justify-content: center; }
@@ -1827,6 +1826,199 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 
 .hero-book { --btn-bg: transparent; --btn-fg: var(--ink); border-color: #b9a78b; }
 .hero-book:hover { background: #ede4d6; }
+
+/*
+ * Results / before-and-after refinement
+ * Load after public/assets/css/site.css.
+ *
+ * This fragment is intentionally scoped to the new results markup (plus the
+ * existing .hero-card comparison) so it does not alter the legacy slider.
+ */
+
+/* --------------------------------------------------------------------------
+   Results heading
+   -------------------------------------------------------------------------- */
+.results-section {
+  background: #f8f5ef;
+}
+
+.results-section .results-heading {
+  max-width: 46rem;
+  margin: 0 auto clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+  text-align: center;
+}
+
+.results-section .results-heading .eyebrow {
+  margin-bottom: .25rem;
+  color: var(--ink-soft);
+}
+
+.results-section .results-heading .display {
+  margin-bottom: .35em;
+  color: var(--gold);
+}
+
+.results-section .results-intro {
+  max-width: 40rem;
+  margin: 0 auto;
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Case cards
+   -------------------------------------------------------------------------- */
+.results-section .case-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, .75rem + 1.5vw, 1.75rem);
+}
+
+.results-section .result-card {
+  min-width: 0;
+  padding: clamp(.875rem, .7rem + 1vw, 1.25rem);
+  background: var(--white);
+  border: 1px solid #e6dccd;
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(60, 44, 20, .06);
+}
+
+.results-section .result-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .2rem 1rem;
+  margin-bottom: .75rem;
+}
+
+.results-section .result-card-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.results-section .case-time {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   Side-by-side, fully visible comparison photographs
+   -------------------------------------------------------------------------- */
+.photo-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.375rem, .25rem + .65vw, .75rem);
+}
+
+.comparison-photo {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  background: var(--white);
+  border: 1px solid rgba(196, 132, 42, .3);
+  border-radius: calc(var(--radius) - 4px);
+  overflow: hidden;
+}
+
+/* The photographs retain their natural 800 × 520 proportion: no fixed height,
+   cover value, clipping, slider, or animation is applied. */
+.comparison-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Captions follow each image in the markup, then sit discreetly at its upper
+   left so both labels remain immediately legible. */
+.comparison-photo figcaption {
+  position: absolute;
+  top: .4rem;
+  left: .4rem;
+  margin: 0;
+  padding: .22rem .42rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .88);
+  color: var(--ink);
+  font-size: max(10px, .6875rem);
+  font-weight: 700;
+  letter-spacing: .035em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.hero-card .photo-comparison {
+  margin-top: 1rem;
+}
+
+/* Keep the card column single-file until each complete photograph has ample
+   room. The scoped selector overrides site.css's global 3-up .case-grid. */
+@media (min-width: 64em) {
+  .results-section .case-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Compact inventor strip
+   -------------------------------------------------------------------------- */
+.inventor.inventor--compact {
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, .8rem + 1vw, 1.5rem);
+  padding-block: clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+
+.inventor.inventor--compact .inventor-photo img {
+  width: min(100%, 220px);
+  max-width: 220px;
+}
+
+.inventor.inventor--compact .inventor-identity {
+  min-width: 0;
+}
+
+.inventor.inventor--compact .inventor-identity h2 {
+  margin-bottom: .1em;
+}
+
+.inventor.inventor--compact .inventor-role {
+  margin-bottom: .6rem;
+}
+
+.inventor.inventor--compact .inventor-stat {
+  margin: 0;
+}
+
+@media (min-width: 56.25em) {
+  .inventor.inventor--compact {
+    grid-template-columns: minmax(140px, 220px) minmax(0, 1fr);
+    column-gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    align-items: center;
+  }
+
+  .inventor.inventor--compact .inventor-photo img {
+    margin-inline: 0;
+  }
+}
+
+/* Baked side-by-side gallery photographs keep their full composition. */
+.gallery-comparison { position: relative; }
+.gallery-photo-label {
+  position: absolute; top: .5rem; left: .6rem;
+  padding: .2rem .4rem; border-radius: 4px;
+  background: rgba(255,255,255,.88); color: var(--ink);
+  font-size: .6875rem; font-weight: 700; line-height: 1.3;
+  letter-spacing: .035em; text-transform: uppercase;
+}
+.gallery-photo-label--after { left: calc(50% + .6rem); }
 
 /* --------------------------------------------------------------------------
    24. Breakpoints
