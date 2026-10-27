@@ -1,0 +1,24 @@
+{
+  "routes": [
+    {
+      "path": "/disclaimer",
+      "title": "Disclaimer"
+    },
+    {
+      "path": "/",
+      "title": "Chao Pinhole"
+    },
+    {
+      "path": "/privacy-policy",
+      "title": "Privacy Policy"
+    },
+    {
+      "path": "/terms-and-conditions",
+      "title": "Terms And Conditions"
+    },
+    {
+      "path": "/thank-you",
+      "title": "Thank You"
+    }
+  ]
+}

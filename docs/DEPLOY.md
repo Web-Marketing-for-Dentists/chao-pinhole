@@ -83,7 +83,7 @@ wildcard. **If you add a page, add its `Cache-Control` line too.**
 
 Assets are cached immutably for a year, so `site.css` and `site.js` are linked
 with a `?v=N` query. **Bump `N` in every HTML file whenever you edit either
-file**, or returning visitors keep the old copy. Currently at `v=11`.
+file**, or returning visitors keep the old copy. Currently at `v=12`.
 
 ## Verified before handoff
 
