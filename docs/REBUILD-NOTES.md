@@ -33,8 +33,8 @@ live site.
 | WP Rocket, RocketCDN | No build to optimise; assets are local and cached via `_headers`. |
 | Gravity Forms | All three forms removed entirely — see **Forms** below. |
 | Header Footer Code Manager | Its three tracking snippets were ported directly — see **Tracking** below. |
-| Popup Maker | The two form popups are gone; the "more reviews" popup is a native `<dialog>`. |
-| jQuery, Swiper, the before/after slider plugin | Replaced with ~300 lines of vanilla JS: CSS scroll-snap carousels, a `range`-input comparison slider. |
+| Popup Maker | The two form popups are gone. (A native `<dialog>` for "more reviews" replaced the third, and was itself removed in October 2026.) |
+| jQuery, Swiper, the before/after slider plugin | Replaced with ~300 lines of vanilla JS: CSS scroll-snap carousels, a before/after comparison slider (since October 2026, the `BeforeAfterSlider` component from the ppc-sites template). |
 | Accessibility OneTap plugin | An overlay widget, not accessibility. Replaced with real semantics: landmarks, skip link, labelled controls, visible focus rings, ARIA tabs/accordion, 44px+ tap targets, `prefers-reduced-motion`. |
 | The 38-language translation dropdown | It was the OneTap plugin's machine-translation widget, not real localisation. |
 | `login-with-google`, `xmlrpc.php`, feeds, `wp-json` | No WordPress to log into. `_redirects` 301s these to `/`. |
@@ -199,72 +199,61 @@ click — verified.
 
 ### Before / after sliders
 
-Five instances. **Which photo sits on which side is not derivable from the
-filenames** — check the rendered page, not the `src`.
+Ten instances, all built by one component: `BeforeAfterSlider` in `site.js`,
+ported from `ppc-sites/templates/before-after-slider-demo.html` (styles are
+the `.bas-*` rules, section 11 of `site.css`). Five are the hero, the
+3/10/6-year cases and the Symptoms photo; the other five are the gallery.
 
-| Slider | Left ("Before") | Right |
+| Slider | Before (left) | After (right) |
 | --- | --- | --- |
-| Hero — "14 Years Later" | `ba-sharon-after.webp` | `ba-sharon-before.webp` |
+| Hero — "14 Years Later" | `ba-sharon-before.webp` | `ba-sharon-after.webp` |
 | 3-Year Case | `ba-eliza-before.webp` | `ba-eliza-after.webp` |
 | 10-Year Case | `ba-rocio-before.webp` | `ba-rocio-after.webp` |
 | 6-Year Case | `ba-rodney-before.webp` | `ba-rodney-after.webp` |
 | Symptoms | `ba-czarina-before.webp` | `ba-czarina-after.webp` |
+| Gallery ×5 | `gallery-<name>-before.webp` | `gallery-<name>-after.webp` |
 
-The hero looks inverted and is not. **The Sharon pair's CDN filenames are
-mislabelled at source**, and the original WordPress site compensated the same
-way — its slider markup put `Sharon-H.-14-years-after01.webp` in the
-`bafg-before-label="Before"` slot. This arrangement was confirmed on screen by
-the client. Do not "fix" it to match the filenames.
+**The Sharon pair was renamed in October 2026.** The CDN filenames were
+mislabelled at source (the WordPress "after" file shows the recession), and the
+markup used to compensate by wiring them crossed. The two files were swapped so
+the names now match what each photo shows. What renders on screen is unchanged:
+recession on the left, the 14-year result on the right.
 
-The other four pairs have unambiguous names (`-before-1` vs `-35-months-after`)
-and are wired the obvious way.
+Markup is one empty div per slider; `site.js` builds the inside:
 
-Watch the class name too: `.ba-after` is the *clipped overlay*, and because it
-is `position: absolute` with `width` and `left: 0` it covers the **left** half
-of the frame. The bare `<img>` underneath shows through on the right. The name
-describes layering, not chronology — reading it as chronology inverts the
-comparison, and did on four sliders until it was caught.
+```html
+<div class="bas-container" data-bas
+     data-before="/assets/img/x-before.webp" data-after="/assets/img/x-after.webp"
+     data-before-label="Before" data-after-label="After"
+     style="--bas-ratio:500/325"
+     aria-label="What the comparison shows">
+  <noscript><img src="/assets/img/x-after.webp" alt="…"></noscript>
+</div>
+```
 
-Each slider's `alt` text describes its **side**, matching the visible label, so
-alt stays put when images are swapped.
+Behaviour kept from the demo: clip-path reveal, white divider with a round grip,
+pill labels, and an eased auto-sweep (15% ↔ 85%, 2.4s per pass, 3 round trips)
+that stops for good on the first touch, click or key press.
 
-#### Idle sweep — hero only, CSS only
+Changes from the demo, all deliberate:
 
-The hero divider animates back and forth to advertise that it is draggable:
-`ba-sweep-clip` / `ba-sweep-handle`, 4s `ease-in-out` infinite — **2 seconds per
-pass**, 4s round trip. Verified by seeking the timeline: 8% at 0ms, 92% at
-2000ms, back to 8% at 4000ms, clip and handle in sync at every offset.
-
-It is **opt-in via `.ba--animated`, and only the hero carries that class.** The
-four sliders below the fold stay parked at the 50% `site.js` sets — five
-sliders animating forever is noise, and they remain fully draggable (verified
-at 20% and 75%).
-
-Two keyframe sets rather than one animated custom property, so no `@property`
-support is needed. It travels 8% → 92% rather than 0% → 100% because the handle
-is a 44px circle centred on its position; at the exact edges half of it would be
-clipped by the frame's `overflow: hidden`.
-
-Interaction handling, also pure CSS:
-
-- `:hover` (pointer devices only) → `animation-play-state: paused`, so the
-  comparison can be read.
-- `:active` and `:focus-within` → `animation: none`. Animations outrank inline
-  styles in the cascade, so dropping the animation hands control back to the
-  inline `width`/`left` that `site.js` writes — the visitor's position sticks.
-  Pressing the range focuses it, and that focus outlives the drag.
-
-**Known limitation:** pure CSS cannot remember that an interaction happened, so
-the sweep resumes if the visitor clicks away and the range loses focus. Making
-it permanent needs one line of JS (set a class on `input`), which was out of
-scope.
-
-`prefers-reduced-motion: reduce` neutralises the sweep via the global rule in
-section 2, leaving the divider at 50%.
-
-The sweep also means the range's `aria-valuenow` (50) does not track the
-animated position. That is intentional — the motion is a decorative affordance,
-and the real value only changes when someone moves it.
+- **Lazy build.** Photos are CSS backgrounds, which a browser fetches as soon
+  as the element exists. Each slider is built only when it comes within 400px
+  of the viewport, so the ~1.5 MB of slider photos is not fetched up front.
+  The two hero photos are `<link rel="preload">`ed in `<head>` instead.
+- **Sweep on sight.** The sweep starts when a slider is half on screen;
+  otherwise sliders below the fold would finish sweeping unseen. Skipped under
+  `prefers-reduced-motion`.
+- **Per-slider aspect ratio** via `--bas-ratio`, matching each photo so `cover`
+  never crops. The demo hard-codes 4:3. The gallery shares one ratio
+  (308/200) so caption rows line up.
+- **Pointer events + `touch-action: pan-y`** instead of mouse/touch listeners
+  and `touch-action: none`. Dragging sideways moves the divider; swiping
+  vertically still scrolls the page.
+- **Keyboard and screen readers.** `role="slider"`, focusable, `aria-valuenow`
+  tracks the divider. Arrow keys move 2% (Shift 10%), Home/End jump to the
+  edges. The container's `aria-label` replaces the `<img alt>` the demo lacks.
+- **No-JS fallback.** A `<noscript>` after-photo sits in the reserved box.
 
 ### Animated gold CTAs
 
@@ -302,36 +291,38 @@ leaving a static gradient ring.
 Five cases — Rocio, John, Sharon, Lynda, Cynthia. **Ceasar was removed** at the
 client's request (it was `gallery-04.webp`, a 13-year upper-arch result).
 
-It was a horizontal scroll carousel showing four at a time; it is now a grid:
-one column on mobile, two from 900px. Three reasons:
+Each case is a before/after slider (see above). The only source for these five
+was a set of **695x250 composites** with both photos, an arrow and captions
+baked in; no originals exist in the repo or the WordPress output. In October
+2026 each composite was cropped into a before/after pair with the arrow and
+text trimmed off, which leaves **~308x200px per photo**. The grid is sized to
+keep them near native width (1 / 2 / 3 columns, max 440px each, last row
+centred). They are still small; larger originals from the client would be the
+fix.
 
-1. Each source image is a **695x250 panorama** with the before/after pair,
-   dates and patient name already baked in. The carousel rendered them ~264px
-   wide, which made all of that unreadable. The grid gives each ~540px.
-2. Horizontal scroll hid the majority of cases behind an affordance people miss.
-3. Names and dates are now real `<figcaption>` text rather than only pixels
-   inside a JPEG, so they are selectable and available to screen readers.
+Names and dates are `<figcaption>` text, and "Individual results may vary" is in
+the intro line above the grid (the composites carried it as pixels).
 
 The separate five-across vertical case carousel that used to sit under the
 3/10/6-year sliders was **removed entirely**, along with its five images.
 
-### Google reviews
+### Testimonials — patient videos
 
-The four original testimonials were replaced with three current Google reviews
-(Scotch Crisostomo, Pearson Nibley, Ginger de Paris), each with an avatar, the
-client-supplied bold emphasis preserved, and a "View review on Google" link out
-to the specific review.
+In October 2026 the section was retitled **"Join the Hundreds of Happy
+Patients"** and its content replaced with four TikTok player embeds
+(`tiktok.com/player/v1/…`, autoplay muted, as supplied). The three Google review
+cards, the "View more reviews" button and the reviews `<dialog>` (14 older
+reviews) were all **removed** at the client's request, along with their CSS and
+the dialog JS.
 
-Avatars were supplied as 450x450 PNGs at 231-328 KB each; re-encoded to 160px
-webp at ~5-6 KB. The grid is 1 / 2 / 3 columns.
+The iframes keep the supplied `src`, `allow` list and `loading="lazy"`. Their
+`title`s are short descriptions rather than the supplied TikTok captions, which
+were long hashtag strings that screen readers would read aloud. Layout: a
+swipeable row on phones, 2-up from 640px, 4-up from 1100px, each 9:16.
 
-The "View more reviews" dialog with the 14 older reviews was **kept** — it was
-not part of the replacement request, and it is additional social proof.
-
-**One thing to check:** Pearson's review says "the photos to prove it below!"
-and describes a top and bottom row of photos. Those photos live in his Google
-review, not on this page, so on-site that sentence points at nothing. The text
-is reproduced verbatim as supplied. Either trim that clause or add his photos.
+The **Rasio "Patient Spotlight"** section and the **"Common Questions"** section
+(with `consultation.webp`) were removed at the same time. The FAQ accordion
+further down is unaffected.
 
 ### Comparison table
 
@@ -352,9 +343,9 @@ bottom bar keeps Call / Book reachable at every scroll position.
 ## Assets
 
 32 images and 2 videos were pulled from the original CDN
-(`a6d2fd1c.delivery.rocketcdn.me`) into `public/assets/`. The one exception is
-the patient-spotlight portrait, which was inlined as a base64 data URI in the
-WordPress output and was extracted to `public/assets/img/rasio-patient.jpg`.
+(`a6d2fd1c.delivery.rocketcdn.me`) into `public/assets/`. The one exception was
+the patient-spotlight portrait (inlined as base64 in the WordPress output); it
+was removed with the spotlight section in October 2026.
 
 Filenames were normalised (`Rodney-K.-before-10-19-2015-scaled.webp` →
 `ba-rodney-before.webp`). The originals are ~10 MB total, dominated by
@@ -367,12 +358,11 @@ Checked in-browser at 375px, 768px, and 1440px:
 - No horizontal overflow at any width.
 - No broken images; no console errors.
 - All tap targets ≥44px.
-- Nav toggle, tabs (with arrow-key roving tabindex), YouTube facades, the
-  reviews dialog, before/after sliders, carousels, countdown, and accordion all
-  functional.
+- Nav toggle, tabs (with arrow-key roving tabindex), YouTube facades,
+  before/after sliders, carousels, countdown, and accordion all functional.
 - Every first-party asset serves without error (remaining console noise is
   third-party DNS in the test sandbox).
-- Zero forms on any page; only the reviews `<dialog>` remains.
+- Zero forms and zero dialogs on any page.
 - Legal pages, thank-you, and 404 render with correct titles and `noindex`.
 
 ## Tracking

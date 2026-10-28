@@ -31,7 +31,7 @@ public/                 the deployable site — this is the source of truth toda
   _redirects            301s from the old WordPress URLs
   assets/
     css/site.css        design tokens + every component, mobile-first
-    js/site.js          nav, sliders, carousels, tabs, dialog, countdown, scrollspy
+    js/site.js          nav, before/after sliders, carousels, tabs, countdown, scrollspy
     img/                30 images
     video/              2 videos
 

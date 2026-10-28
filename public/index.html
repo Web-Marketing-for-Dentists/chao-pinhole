@@ -24,6 +24,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="/assets/img/hero-bg-mobile.webp" media="(max-width: 56.24em)">
 <link rel="preload" as="image" href="/assets/img/hero-bg.webp" media="(min-width: 56.25em)">
+<!-- Hero before/after slider: site.js paints these as CSS backgrounds, which
+     the browser would otherwise only discover after the script runs. -->
+<link rel="preload" as="image" href="/assets/img/ba-sharon-before.webp">
+<link rel="preload" as="image" href="/assets/img/ba-sharon-after.webp">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Google tag (gtag.js) — GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8V0B4FHSPH"></script>
@@ -54,7 +58,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 
-<link rel="stylesheet" href="/assets/css/site.css?v=11">
+<link rel="stylesheet" href="/assets/css/site.css?v=12">
 
 <script type="application/ld+json">
 {
@@ -180,18 +184,12 @@
         <h2>Pinhole Patient</h2>
         <p class="hero-card-note">Procedure completed within 2 hours.<br>Long lasting results!</p>
 
-        <div class="ba ba--animated" data-ba>
-          <div class="ba-frame">
-            <img src="/assets/img/ba-sharon-before.webp" alt="The same gum line 14 years after Pinhole Gum Rejuvenation" width="500" height="325" loading="eager">
-            <div class="ba-after">
-              <img src="/assets/img/ba-sharon-after.webp" alt="Gum line before Pinhole Gum Rejuvenation, showing recession" width="500" height="325" loading="eager">
-            </div>
-            <span class="ba-label ba-label--before">Before</span>
-            <span class="ba-label ba-label--after">14 Years Later</span>
-            <div class="ba-handle"></div>
-            <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5"
-                   aria-label="Reveal the before and after photo" aria-valuetext="Comparison position">
-          </div>
+        <div class="bas-container" data-bas
+             data-before="/assets/img/ba-sharon-before.webp" data-after="/assets/img/ba-sharon-after.webp"
+             data-before-label="Before" data-after-label="14 Years Later"
+             style="--bas-ratio:500/325"
+             aria-label="Before and after: gum recession before Pinhole Gum Rejuvenation, and the same gum line 14 years later">
+          <noscript><img src="/assets/img/ba-sharon-after.webp" alt="The same gum line 14 years after Pinhole Gum Rejuvenation" width="500" height="325"></noscript>
         </div>
 
         <ul class="checklist">
@@ -248,49 +246,31 @@
 
       <div class="case-grid">
         <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-eliza-after.webp" alt="Eliza T. three years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-eliza-before.webp" alt="Eliza T. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Eliza T. — reveal the before and after photo">
-            </div>
+          <div class="bas-container" data-bas
+               data-before="/assets/img/ba-eliza-before.webp" data-after="/assets/img/ba-eliza-after.webp"
+               style="--bas-ratio:2560/1666"
+               aria-label="Eliza T. before Pinhole Gum Rejuvenation and three years after">
+            <noscript><img src="/assets/img/ba-eliza-after.webp" alt="Eliza T. three years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy"></noscript>
           </div>
           <figcaption class="ba-caption">3-Year Case</figcaption>
         </figure>
 
         <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-rocio-after.webp" alt="Rocio K. ten years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-rocio-before.webp" alt="Rocio K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Rocio K. — reveal the before and after photo">
-            </div>
+          <div class="bas-container" data-bas
+               data-before="/assets/img/ba-rocio-before.webp" data-after="/assets/img/ba-rocio-after.webp"
+               style="--bas-ratio:2560/1666"
+               aria-label="Rocio K. before Pinhole Gum Rejuvenation and ten years after">
+            <noscript><img src="/assets/img/ba-rocio-after.webp" alt="Rocio K. ten years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy"></noscript>
           </div>
           <figcaption class="ba-caption">10-Year Case</figcaption>
         </figure>
 
         <figure style="margin:0">
-          <div class="ba" data-ba>
-            <div class="ba-frame">
-              <img src="/assets/img/ba-rodney-after.webp" alt="Rodney K. six years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              <div class="ba-after">
-                <img src="/assets/img/ba-rodney-before.webp" alt="Rodney K. before Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-              </div>
-              <span class="ba-label ba-label--before">Before</span>
-              <span class="ba-label ba-label--after">After</span>
-              <div class="ba-handle"></div>
-              <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Rodney K. — reveal the before and after photo">
-            </div>
+          <div class="bas-container" data-bas
+               data-before="/assets/img/ba-rodney-before.webp" data-after="/assets/img/ba-rodney-after.webp"
+               style="--bas-ratio:2560/1666"
+               aria-label="Rodney K. before Pinhole Gum Rejuvenation and six years after">
+            <noscript><img src="/assets/img/ba-rodney-after.webp" alt="Rodney K. six years after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy"></noscript>
           </div>
           <figcaption class="ba-caption">6-Year Case</figcaption>
         </figure>
@@ -323,31 +303,6 @@
         Unlike traditional grafting techniques, the Pinhole® Surgical Technique requires
         no incisions, no sutures, and no grafts.
       </p>
-    </div>
-  </section>
-
-  <!-- ====================================================================
-       Patient spotlight
-       ==================================================================== -->
-  <section class="section section--mist section--pattern" aria-labelledby="spotlight-h">
-    <div class="shell">
-      <div class="spotlight">
-        <div class="spotlight-avatar">
-          <img src="/assets/img/rasio-patient.jpg" alt="Rasio, a patient at The Pinhole Clinic" width="264" height="264" loading="lazy">
-          <p class="spotlight-name">Rasio</p>
-        </div>
-        <div>
-          <p class="spotlight-title" id="spotlight-h">Patient Spotlight</p>
-          <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-
-          <div class="spotlight-quote">
-            <p><span class="spotlight-label">Before:</span>When people think of me, it’s my smile and my laughter. My daughter is getting married in May, and I want to express my happiness through my smile.</p>
-          </div>
-          <div class="spotlight-quote">
-            <p><span class="spotlight-label">After:</span>I’m so happy. I’m so excited about this. It really came true. It’s amazing, I can’t believe it.</p>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -459,17 +414,11 @@
        ==================================================================== -->
   <section class="section section--mist" aria-labelledby="symptoms-h">
     <div class="shell" style="display:grid;gap:2rem">
-      <div class="ba" data-ba>
-        <div class="ba-frame">
-          <img src="/assets/img/ba-czarina-after.webp" alt="The same gum line after Pinhole Gum Rejuvenation" width="800" height="520" loading="lazy">
-          <div class="ba-after">
-            <img src="/assets/img/ba-czarina-before.webp" alt="Gum recession before treatment" width="800" height="520" loading="lazy">
-          </div>
-          <span class="ba-label ba-label--before">Before</span>
-          <span class="ba-label ba-label--after">After</span>
-          <div class="ba-handle"></div>
-          <input class="ba-range" type="range" min="0" max="100" value="50" step="0.5" aria-label="Reveal the before and after photo">
-        </div>
+      <div class="bas-container" data-bas
+           data-before="/assets/img/ba-czarina-before.webp" data-after="/assets/img/ba-czarina-after.webp"
+           style="--bas-ratio:504/247"
+           aria-label="Before and after: gum recession before treatment, and the same gum line after Pinhole Gum Rejuvenation">
+        <noscript><img src="/assets/img/ba-czarina-after.webp" alt="The same gum line after Pinhole Gum Rejuvenation" width="504" height="247" loading="lazy"></noscript>
       </div>
 
       <div>
@@ -557,31 +506,56 @@
       <ul class="ba-gallery">
         <li>
           <figure>
-            <img src="/assets/img/gallery-01.webp" alt="Rocio — gum line before Pinhole® treatment in December 2013 and after, in March 2016" width="695" height="250" loading="lazy" decoding="async">
+            <div class="bas-container" data-bas
+                 data-before="/assets/img/gallery-rocio-before.webp" data-after="/assets/img/gallery-rocio-after.webp"
+                 style="--bas-ratio:308/198"
+                 aria-label="Rocio — gum line before Pinhole® treatment in December 2013 and after, in March 2016">
+              <noscript><img src="/assets/img/gallery-rocio-after.webp" alt="Rocio — gum line after Pinhole® treatment, March 2016" width="308" height="198" loading="lazy"></noscript>
+            </div>
             <figcaption><b>Rocio</b> <span>Before 12/10/13 &middot; After 3/19/16</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-02.webp" alt="John — gum line before Pinhole® treatment in February 2013 and after, in November 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="bas-container" data-bas
+                 data-before="/assets/img/gallery-john-before.webp" data-after="/assets/img/gallery-john-after.webp"
+                 style="--bas-ratio:308/201"
+                 aria-label="John — gum line before Pinhole® treatment in February 2013 and after, in November 2014">
+              <noscript><img src="/assets/img/gallery-john-after.webp" alt="John — gum line after Pinhole® treatment, November 2014" width="308" height="201" loading="lazy"></noscript>
+            </div>
             <figcaption><b>John</b> <span>Before 2/13/13 &middot; After 11/8/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-03.webp" alt="Sharon — gum line before Pinhole® treatment in March 2011 and after, in September 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="bas-container" data-bas
+                 data-before="/assets/img/gallery-sharon-before.webp" data-after="/assets/img/gallery-sharon-after.webp"
+                 style="--bas-ratio:308/201"
+                 aria-label="Sharon — gum line before Pinhole® treatment in March 2011 and after, in September 2014">
+              <noscript><img src="/assets/img/gallery-sharon-after.webp" alt="Sharon — gum line after Pinhole® treatment, September 2014" width="308" height="201" loading="lazy"></noscript>
+            </div>
             <figcaption><b>Sharon</b> <span>Before 3/29/11 &middot; After 9/13/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-05.webp" alt="Lynda — gum line before Pinhole® treatment in March 2007 and after, in October 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="bas-container" data-bas
+                 data-before="/assets/img/gallery-lynda-before.webp" data-after="/assets/img/gallery-lynda-after.webp"
+                 style="--bas-ratio:308/198"
+                 aria-label="Lynda — gum line before Pinhole® treatment in March 2007 and after, in October 2014">
+              <noscript><img src="/assets/img/gallery-lynda-after.webp" alt="Lynda — gum line after Pinhole® treatment, October 2014" width="308" height="198" loading="lazy"></noscript>
+            </div>
             <figcaption><b>Lynda</b> <span>Before 3/15/07 &middot; After 10/25/14</span></figcaption>
           </figure>
         </li>
         <li>
           <figure>
-            <img src="/assets/img/gallery-06.webp" alt="Cynthia — gum line before Pinhole® treatment in March 2005 and after, in July 2014" width="695" height="250" loading="lazy" decoding="async">
+            <div class="bas-container" data-bas
+                 data-before="/assets/img/gallery-cynthia-before.webp" data-after="/assets/img/gallery-cynthia-after.webp"
+                 style="--bas-ratio:308/200"
+                 aria-label="Cynthia — gum line before Pinhole® treatment in March 2005 and after, in July 2014">
+              <noscript><img src="/assets/img/gallery-cynthia-after.webp" alt="Cynthia — gum line after Pinhole® treatment, July 2014" width="308" height="200" loading="lazy"></noscript>
+            </div>
             <figcaption><b>Cynthia</b> <span>Before 3/31/05 &middot; After 7/30/14</span></figcaption>
           </figure>
         </li>
@@ -595,56 +569,25 @@
   <section class="section section--mist section--pattern" id="testimonials" aria-labelledby="testimonials-h">
     <div class="shell">
       <p class="eyebrow center" style="font-weight:300">What People Say</p>
-      <h2 id="testimonials-h" class="display center" style="margin-bottom:1.75rem">Testimonials</h2>
+      <h2 id="testimonials-h" class="display center" style="margin-bottom:1.75rem">Join the Hundreds of Happy Patients</h2>
 
-      <ul class="quote-grid">
-        <li class="quote-card">
-          <img class="quote-avatar" src="/assets/img/review-scotch.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
-          <p class="quote-name">Scotch Crisostomo</p>
-          <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-          <blockquote>
-            <p>Dr. Chao is truly exceptional. I had the <b>pinhole surgical technique</b> done for gum recession over <b>two years ago</b>, and <b>my gums still look healthy, thick, and strong today</b>. The results have held beautifully. The entire staff has been consistently kind, professional, and attentive throughout the process and follow-ups. I&rsquo;m incredibly grateful for the care and expertise I received and would highly recommend this office to anyone dealing with gum recession.</p>
-          </blockquote>
-          <a class="quote-link" href="https://maps.app.goo.gl/vCrX3XErKV4235gg8" target="_blank" rel="noopener">
-            <img src="/assets/img/google-icon.webp" alt="" width="18" height="18" loading="lazy">
-            View review on Google
-            <span class="visually-hidden">(opens in a new tab)</span>
-          </a>
+      <!-- TikTok player embeds, as supplied (autoplay, muted). loading="lazy"
+           keeps them from loading until the section nears the viewport.
+           Titles are short descriptions: screen readers announce them. -->
+      <ul class="video-grid">
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7425821271553821982?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: experience one day after Pinhole treatment" allowfullscreen loading="lazy"></iframe>
         </li>
-
-        <li class="quote-card">
-          <img class="quote-avatar" src="/assets/img/review-pearson.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
-          <p class="quote-name">Pearson Nibley</p>
-          <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-          <blockquote>
-            <p>I have had a great experience over the past few years with <b>Dr. Chao</b> and his team, and the photos to prove it below! The top row is from before my <b>pinhole procedure in 2022</b> and the bottom photos are from a recent office visit in December 2025. You can see the improvements and how my gum line looks better.</p>
-            <p>Dr. Chao is very friendly, knowledgeable and his staff is so great and caring. I look forward to continuing with them and the free annual check-up/cleaning they provide after your pinhole procedure!</p>
-          </blockquote>
-          <a class="quote-link" href="https://maps.app.goo.gl/4JQYCuLpC3khLoTm6" target="_blank" rel="noopener">
-            <img src="/assets/img/google-icon.webp" alt="" width="18" height="18" loading="lazy">
-            View review on Google
-            <span class="visually-hidden">(opens in a new tab)</span>
-          </a>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7431645039131954463?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Rocio's new smile revealed on The Doctors" allowfullscreen loading="lazy"></iframe>
         </li>
-
-        <li class="quote-card">
-          <img class="quote-avatar" src="/assets/img/review-ginger.webp" alt="" width="80" height="80" loading="lazy" decoding="async">
-          <p class="quote-name">Ginger de Paris</p>
-          <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-          <blockquote>
-            <p>I searched for the BEST dentist in this world who could help me with my receding gum problem and I found <b>Dr Chao and his miraculous pinhole technique</b>! He saved my gum and from losing my teeth! He deserves 5 stars! I have always received the best care I have ever experienced at each visit, with great attention to details, and his caring and skilled staff always makes you feel calm and relax. Although I moved to Arizona recently I drive all the way to Alhambra for my regular teeth cleanings. I trust him 100% for all my dental needs&hellip; <b>he is the BEST dentist</b> I ever had in my life.</p>
-          </blockquote>
-          <a class="quote-link" href="https://maps.app.goo.gl/JFpFr2zCUCzpxze98" target="_blank" rel="noopener">
-            <img src="/assets/img/google-icon.webp" alt="" width="18" height="18" loading="lazy">
-            View review on Google
-            <span class="visually-hidden">(opens in a new tab)</span>
-          </a>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7417995702086782238?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: a happy patient's Pinhole results" allowfullscreen loading="lazy"></iframe>
+        </li>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7418707463521733930?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Nancy's visit with Dr. Chao's team" allowfullscreen loading="lazy"></iframe>
         </li>
       </ul>
-
-      <div class="btn-row btn-row--center" style="margin-top:1.75rem">
-        <a class="btn" href="#reviews-dialog" data-open-dialog="reviews-dialog">View more reviews</a>
-      </div>
     </div>
   </section>
 
@@ -695,23 +638,6 @@
             <button class="yt-facade" type="button" data-video="fKCfw7VqqTM" data-title="KKFX Morning: A Painless Treatment for Gum Recession" aria-label="Play: KKFX Morning: A Painless Treatment for Gum Recession"></button>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====================================================================
-       Common questions
-       ==================================================================== -->
-  <section class="section section--mist" aria-labelledby="common-h">
-    <div class="shell" style="display:grid;gap:2rem">
-      <img src="/assets/img/consultation.webp" alt="Consultation at Chao Pinhole" width="800" height="533" loading="lazy" style="border-radius:var(--radius)">
-      <div>
-        <h2 id="common-h" class="display">Common Questions</h2>
-        <dl class="qa-list">
-          <div><dt>Does it hurt?</dt><dd>Minimal discomfort, no stitches needed.</dd></div>
-          <div><dt>How long does the procedure take?</dt><dd>Usually 1–2 hours.</dd></div>
-          <div><dt>How long do results last?</dt><dd>Long-lasting with proper care.</dd></div>
-        </dl>
       </div>
     </div>
   </section>
@@ -1013,93 +939,6 @@
   </a>
 </div>
 
-<!-- ======================================================================
-     Dialogs
-     ====================================================================== -->
-
-<dialog class="modal" id="reviews-dialog" aria-labelledby="reviews-dialog-h">
-  <div class="modal-head">
-    <h2 id="reviews-dialog-h">What Our Patients Say</h2>
-    <button class="modal-close" type="button" data-close-dialog aria-label="Close">✕</button>
-  </div>
-  <div class="modal-body">
-    <div class="quote-grid" style="grid-template-columns:1fr">
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>I have been a loyal patient at Dr. Chao’s office since 2015, and I must say, my experience has been nothing short of exceptional. Dr. Chao not only addressed the pain in my tooth with precision and care but also performed a crown procedure that exceeded my expectations. Despite moving to Fontana, I continue to make the journey to see Dr. Chao regularly for cleanings.</p></blockquote>
-        <cite>— Grace Gonzalez</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>I was referred to Alhambra Family Dental by my primary doctor for some teeth extractions. The procedure went smooth and painless. Probably one of the best dental procedures which didn’t make the doctor stop due to the pain. I have found my new family dentist.</p></blockquote>
-        <cite>— Gordon Hall</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>For many years I was terrified of going to the dentist. I am so amazed at how painless everything has been. Dr. Chao has greatly helped me overcome my fear of the dentist, and at least in his hands I am not afraid anymore.</p></blockquote>
-        <cite>— Ruth Gonzalez</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>My experience has been wonderful! The office is very cozy and friendly, and very up to date with technology. Dr. Chao is also very nice and knows what he is doing! I would recommend this dentistry to anyone who wants a great experience.</p></blockquote>
-        <cite>— Elyse Holman</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>My fear of the dentist caused me and my overall health to suffer greatly for years. Dr. Chao was so patient and understanding with me. The treatment I received from Dr. Chao and his very friendly and supportive staff changed my life. I no longer fear going to the dentist.</p></blockquote>
-        <cite>— Johnny Nixon</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>I have been a patient of Dr. Chao’s for ten years. He greatly improved the health of my gums and teeth. He also sees both of my children, who have never had a cavity. Dr. Chao’s knowledge of dentistry is amazing and we benefit greatly from his skill.</p></blockquote>
-        <cite>— Eileen Lee</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>Dr. Chao and his staff have always made me feel like I am the most important patient there. I used to be deathly afraid of the dentist, but I know that Dr. Chao will do everything to keep it as painless as possible. My teeth and health have improved since I’ve been going to him.</p></blockquote>
-        <cite>— Buttons Pettie</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>The dentist was extremely understanding and gentle. She kept asking if I was OK while cleaning my teeth. I’m really grateful for this dentist.</p></blockquote>
-        <cite>— Tatiana Ortega</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>Excellent and professional dental care. I have been with this office since 1984 and love to keep going back to have my dental work done there.</p></blockquote>
-        <cite>— Emad Lotfy</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>It’s very clean and organized and they care a lot about their patients. The staff is professional — it’s excellent. Thank you for the excellent job you did for me.</p></blockquote>
-        <cite>— Nancy Tadros</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>I love the way the doctor and staff work — very knowledgeable about the dental treatment and procedures. I will be returning, and my children too.</p></blockquote>
-        <cite>— Mario Martinez</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>After undergoing a kidney transplant, Dr. Chao and his team have consistently provided me with exceptionally professional and caring service. I have complete trust in Dr. Chao’s expertise and skills, and I am highly satisfied with the friendly attitude and efficiency of his medical team.</p></blockquote>
-        <cite>— Jenny Mai</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>Since I came to Dr. Chao’s dental clinic, my severe periodontitis has improved a lot, and 15 of my teeth have grown back. I am so happy. Thank you Dr. Chao and all the medical staff at the clinic!</p></blockquote>
-        <cite>— Joann Xie</cite>
-      </article>
-      <article class="quote-card">
-        <p class="stars" aria-label="Rated 5 out of 5">★★★★★</p>
-        <blockquote><p>Being in this office is one of the best experiences. Dr. Chao is exceptional — all his knowledge, experience and kindness. I am very grateful that he is my dentist, and all the staff are very kind and warm.</p></blockquote>
-        <cite>— Adriana Reyes</cite>
-      </article>
-    </div>
-  </div>
-</dialog>
-
-<!-- No form dialogs: the site pushes call, chat, and schedule only. -->
-
 
 <!-- GoHighLevel: auto-sizes the booking iframe to its content height -->
 <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
@@ -1107,7 +946,7 @@
 <!-- SellWithChat live chat widget (carries its own CTA) -->
 <script src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
 
-<script src="/assets/js/site.js?v=11" defer></script>
+<script src="/assets/js/site.js?v=12" defer></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

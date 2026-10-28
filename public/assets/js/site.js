@@ -67,55 +67,261 @@
   }
 
   /* ------------------------------------------------------------------------
-     Before / after comparison sliders
-     Markup owns a range input; JS only mirrors its value onto the clip width.
-     Keyboard + pointer + touch all work through the native input.
+     Before / after comparison sliders — BeforeAfterSlider
+     Ported from ppc-sites/templates/before-after-slider-demo.html. The DOM it
+     builds, the clip-path reveal and the eased auto-sweep (N sweeps, stops
+     the moment the visitor touches it) are the demo's.
+
+     Changes from the demo, all deliberate:
+     - Pointer events with pointer capture replace the separate mouse + touch
+       listeners on window. Same behaviour, and with touch-action: pan-y a
+       vertical swipe still scrolls the page (the browser cancels the drag).
+     - Keyboard: it is a focusable role="slider"; arrows move 2%
+       (Shift = 10%), Home/End jump to the edges.
+     - Built from data-* attributes on the markup, and only once the slider
+       nears the viewport, so ~1.5 MB of photos is not fetched up front.
+     - The auto-sweep waits until the slider is half on screen (below-the-fold
+       sliders would otherwise finish sweeping unseen), and is skipped under
+       prefers-reduced-motion.
      ------------------------------------------------------------------------ */
-  function initBeforeAfter() {
-    $$('.ba').forEach(function (ba) {
-      var after  = $('.ba-after', ba);
-      var handle = $('.ba-handle', ba);
-      var range  = $('.ba-range', ba);
-      var img    = $('.ba-after img', ba);
-      if (!after || !range) return;
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
 
-      function paint() {
-        var pct = Number(range.value);
-        after.style.width = pct + '%';
-        if (handle) handle.style.left = pct + '%';
-        range.setAttribute('aria-valuenow', String(Math.round(pct)));
-      }
+  function BeforeAfterSlider(el, options) {
+    var opts = Object.assign(
+      {
+        beforeImage: '',
+        afterImage: '',
+        beforeLabel: 'Before',
+        afterLabel: 'After',
+        startPosition: 50,
+        autoSlide: true,
+        autoSlideSpeed: 1400,
+        autoSlideSweeps: 3,
+        autoSlideRange: [15, 85]
+      },
+      options || {}
+    );
 
-      // The clipped image must stay pinned to the container width, not the clip width
-      function sizeImage() {
-        if (img) img.style.width = ba.clientWidth + 'px';
-      }
+    this.el = el;
+    this.opts = opts;
+    this.position = clamp(opts.startPosition, 0, 100);
+    this.dragging = false;
+    this.autoTimer = null;
+    this.stopped = false;
 
-      on(range, 'input', paint);
-      on(window, 'resize', sizeImage);
-      if (img && !img.complete) on(img, 'load', sizeImage);
+    this._buildDom();
+    this._bindEvents();
+    this.setPosition(this.position);
 
-      sizeImage();
-      paint();
+    if (opts.autoSlide) {
+      this._startAutoSlide();
+    }
+  }
 
-      // Dragging anywhere on the image (not just the thumb) feels better on touch
-      var dragging = false;
-      function moveTo(clientX) {
-        var rect = ba.getBoundingClientRect();
-        var pct = ((clientX - rect.left) / rect.width) * 100;
-        range.value = String(Math.max(0, Math.min(100, pct)));
-        paint();
-      }
-      on(ba, 'pointerdown', function (e) {
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
-        dragging = true;
-        ba.setPointerCapture(e.pointerId);
-        moveTo(e.clientX);
-      });
-      on(ba, 'pointermove', function (e) { if (dragging) moveTo(e.clientX); });
-      on(ba, 'pointerup', function () { dragging = false; });
-      on(ba, 'pointercancel', function () { dragging = false; });
+  BeforeAfterSlider.prototype._buildDom = function () {
+    var el = this.el;
+    el.classList.add('bas-container');
+    el.innerHTML = '';   // drops the <noscript> fallback
+
+    var after = document.createElement('div');
+    after.className = 'bas-image bas-image--after';
+    after.style.backgroundImage = 'url("' + this.opts.afterImage + '")';
+
+    var afterLabel = document.createElement('span');
+    afterLabel.className = 'bas-label bas-label--after';
+    afterLabel.textContent = this.opts.afterLabel;
+    after.appendChild(afterLabel);
+
+    var before = document.createElement('div');
+    before.className = 'bas-image bas-image--before';
+    before.style.backgroundImage = 'url("' + this.opts.beforeImage + '")';
+
+    var beforeLabel = document.createElement('span');
+    beforeLabel.className = 'bas-label bas-label--before';
+    beforeLabel.textContent = this.opts.beforeLabel;
+    before.appendChild(beforeLabel);
+
+    var handle = document.createElement('div');
+    handle.className = 'bas-handle';
+    var grip = document.createElement('div');
+    grip.className = 'bas-handle-grip';
+    handle.appendChild(grip);
+
+    el.appendChild(after);
+    el.appendChild(before);
+    el.appendChild(handle);
+
+    el.setAttribute('role', 'slider');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-valuemin', '0');
+    el.setAttribute('aria-valuemax', '100');
+
+    this.beforeEl = before;
+    this.handleEl = handle;
+  };
+
+  BeforeAfterSlider.prototype._bindEvents = function () {
+    var self = this;
+    var el = this.el;
+
+    on(el, 'pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      self._stopAutoSlide();
+      self.dragging = true;
+      try { el.setPointerCapture(e.pointerId); } catch (err) { /* already released */ }
+      self._updateFromEvent(e);
     });
+    on(el, 'pointermove', function (e) {
+      if (!self.dragging) return;
+      self._updateFromEvent(e);
+    });
+    on(el, 'pointerup', function () { self.dragging = false; });
+    on(el, 'pointercancel', function () { self.dragging = false; });
+
+    on(el, 'click', function () { self._stopAutoSlide(); });
+
+    on(el, 'keydown', function (e) {
+      var step = e.shiftKey ? 10 : 2;
+      var next;
+      switch (e.key) {
+        case 'ArrowLeft':  case 'ArrowDown': next = self.position - step; break;
+        case 'ArrowRight': case 'ArrowUp':   next = self.position + step; break;
+        case 'Home': next = 0;   break;
+        case 'End':  next = 100; break;
+        default: return;
+      }
+      e.preventDefault();
+      self._stopAutoSlide();
+      self.setPosition(next);
+    });
+  };
+
+  BeforeAfterSlider.prototype._updateFromEvent = function (e) {
+    var rect = this.el.getBoundingClientRect();
+    var pct = ((e.clientX - rect.left) / rect.width) * 100;
+    this.setPosition(pct);
+  };
+
+  BeforeAfterSlider.prototype.setPosition = function (pct) {
+    this.position = clamp(pct, 0, 100);
+    this.beforeEl.style.clipPath = 'inset(0 ' + (100 - this.position) + '% 0 0)';
+    this.handleEl.style.left = this.position + '%';
+    this.el.setAttribute('aria-valuenow', String(Math.round(this.position)));
+  };
+
+  BeforeAfterSlider.prototype._startAutoSlide = function () {
+    if (this.stopped) return;   // the visitor got there first
+    var self = this;
+    var range = this.opts.autoSlideRange;
+    var speed = this.opts.autoSlideSpeed;
+    var sweepsRemaining = this.opts.autoSlideSweeps * 2;
+    var goingRight = true;
+
+    function animateStep(fromPct, toPct, duration, onDone) {
+      var start = null;
+
+      function frame(timestamp) {
+        if (self.stopped) return;
+        if (start === null) start = timestamp;
+        var elapsed = timestamp - start;
+        var t = clamp(elapsed / duration, 0, 1);
+        var eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        self.setPosition(fromPct + (toPct - fromPct) * eased);
+
+        if (t < 1) {
+          self.autoTimer = requestAnimationFrame(frame);
+        } else if (onDone) {
+          onDone();
+        }
+      }
+
+      self.autoTimer = requestAnimationFrame(frame);
+    }
+
+    function next() {
+      if (self.stopped || sweepsRemaining <= 0) {
+        self.autoTimer = null;
+        return;
+      }
+      var from = goingRight ? range[0] : range[1];
+      var to = goingRight ? range[1] : range[0];
+      animateStep(from, to, speed, function () {
+        goingRight = !goingRight;
+        sweepsRemaining -= 1;
+        next();
+      });
+    }
+
+    this.setPosition(range[0]);
+    goingRight = true;
+    next();
+  };
+
+  BeforeAfterSlider.prototype._stopAutoSlide = function () {
+    if (this.stopped) return;
+    this.stopped = true;
+    if (this.autoTimer) {
+      cancelAnimationFrame(this.autoTimer);
+      this.autoTimer = null;
+    }
+  };
+
+  /* Markup:
+     <div class="bas-container" data-bas
+          data-before="/img/x-before.webp" data-after="/img/x-after.webp"
+          data-before-label="Before" data-after-label="After"
+          style="--bas-ratio:500/325" aria-label="What the photos show">
+       <noscript><img src="/img/x-after.webp" alt="…"></noscript>
+     </div> */
+  function initBeforeAfter() {
+    var els = $$('[data-bas]');
+    if (!els.length) return;
+
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function build(el) {
+      var d = el.dataset;
+      el._bas = new BeforeAfterSlider(el, {
+        beforeImage: d.before,
+        afterImage: d.after,
+        beforeLabel: d.beforeLabel || 'Before',
+        afterLabel: d.afterLabel || 'After',
+        autoSlide: false,          // started separately, once it is on screen
+        autoSlideSpeed: 2400,      // the demo's own settings
+        autoSlideSweeps: 3
+      });
+    }
+
+    function sweep(el) {
+      if (!reduceMotion && el._bas) el._bas._startAutoSlide();
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { build(el); sweep(el); });
+      return;
+    }
+
+    var sweepObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        sweepObserver.unobserve(entry.target);
+        sweep(entry.target);
+      });
+    }, { threshold: 0.5 });
+
+    var buildObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        buildObserver.unobserve(entry.target);
+        build(entry.target);
+        sweepObserver.observe(entry.target);
+      });
+    }, { rootMargin: '400px 0px' });
+
+    els.forEach(function (el) { buildObserver.observe(el); });
   }
 
   /* ------------------------------------------------------------------------
@@ -202,30 +408,6 @@
   }
 
   /* ------------------------------------------------------------------------
-     Dialogs
-     ------------------------------------------------------------------------ */
-  function initDialogs() {
-    $$('[data-open-dialog]').forEach(function (trigger) {
-      on(trigger, 'click', function (e) {
-        var dlg = document.getElementById(trigger.getAttribute('data-open-dialog'));
-        if (!dlg || typeof dlg.showModal !== 'function') return;  // let the href fall through
-        e.preventDefault();
-        dlg.showModal();
-      });
-    });
-
-    $$('dialog.modal').forEach(function (dlg) {
-      $$('[data-close-dialog]', dlg).forEach(function (btn) {
-        on(btn, 'click', function () { dlg.close(); });
-      });
-      // Click the backdrop to dismiss
-      on(dlg, 'click', function (e) {
-        if (e.target === dlg) dlg.close();
-      });
-    });
-  }
-
-  /* ------------------------------------------------------------------------
      Offer countdown — resets to a fresh window per visitor, persisted locally
      ------------------------------------------------------------------------ */
   function initCountdown() {
@@ -300,7 +482,6 @@
     initCarousels();
     initTabs();
     initYouTubeFacades();
-    initDialogs();
     initCountdown();
     initScrollSpy();
     on(window, 'resize', syncHeaderHeight);

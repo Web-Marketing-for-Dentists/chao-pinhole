@@ -540,150 +540,110 @@ button { font: inherit; color: inherit; }
 
 /* --------------------------------------------------------------------------
    11. Before / After comparison slider
+   Ported from ppc-sites/templates/before-after-slider-demo.html (the
+   BeforeAfterSlider component). Look and behaviour match the demo: white
+   divider, round grip, pill labels, a few auto-sweeps that stop on touch.
+
+   Differences from the demo, all deliberate:
+   - Radius and background use the site tokens.
+   - Aspect ratio comes from --bas-ratio, set inline per slider to the photo's
+     own ratio, so `cover` never crops. The demo hard-codes 4:3.
+   - touch-action is pan-y, not none. With ten full-width sliders on a phone,
+     `none` would stop the page scrolling whenever a thumb lands on a photo.
+   - .bas-container is in the markup (not only added by JS) so the box
+     reserves its height before site.js runs. No layout shift.
    -------------------------------------------------------------------------- */
-.ba {
+.bas-container {
   position: relative;
+  width: 100%;
+  aspect-ratio: var(--bas-ratio, 4 / 3);
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--ink);
-  touch-action: pan-y;                /* let the page scroll vertically */
   user-select: none;
   -webkit-user-select: none;
+  touch-action: pan-y;
+  cursor: ew-resize;
 }
-.ba-frame { position: relative; display: block; }
-.ba-frame img {
+/* <noscript> fallback: a static photo in the reserved box */
+.bas-container img {
   width: 100%;
-  display: block;
-  pointer-events: none;
+  height: 100%;
+  object-fit: cover;
 }
-/* The clipped overlay. `width` with `left: 0` means this covers the LEFT half
-   of the frame — so it holds the BEFORE photo, and the bare <img> underneath
-   shows through on the RIGHT as the AFTER photo. The class name is about
-   layering, not chronology; getting that backwards inverts the comparison. */
-.ba-after {
-  position: absolute;
-  inset: 0;
-  width: 50%;
-  overflow: hidden;
+.bas-container:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }
-.ba-after img {
+
+.bas-image {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   height: 100%;
-  width: auto;
-  max-width: none;
-  object-fit: cover;
+  background-size: cover;
+  background-position: center;
 }
+.bas-image--after  { z-index: 1; }
+.bas-image--before { z-index: 2; }
 
-.ba-handle {
+.bas-label {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 3px;
-  margin-left: -1.5px;
-  background: var(--white);
-  box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+  top: 16px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+  background: rgba(0, 0, 0, .45);
+  border-radius: 999px;
+  white-space: nowrap;
   pointer-events: none;
 }
-.ba-handle::after {
-  content: "";
+.bas-label--before { left: 16px; }
+.bas-label--after  { right: 16px; }
+
+.bas-handle {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: #fff;
+  transform: translateX(-1px);
+  z-index: 3;
+  pointer-events: none;
+}
+.bas-handle-grip {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: var(--white) no-repeat center;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='%232A2B2B'%3E%3Cpath d='M9.5 6 4 12l5.5 6v-4h5v4l5.5-6-5.5-6v4h-5z'/%3E%3C/svg%3E");
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
-
-/* ---- Idle sweep -----------------------------------------------------------
-   Advertises that the divider is draggable. One pass left -> right takes 2s,
-   so the full there-and-back cycle is 4s.
-
-   Two keyframe sets rather than one animated custom property, so this needs no
-   @property support; identical duration and easing keep them in lockstep.
-
-   Animations outrank inline styles in the cascade, so these override the
-   width/left that site.js writes on load — and `animation: none` on
-   interaction hands control straight back to it. No JS involved either way.
-
-   It stops short of 0%/100% because the 44px handle is centred on its
-   position: at the exact edges half of it would be clipped by the frame. */
-@keyframes ba-sweep-clip {
-  0%, 100% { width: 8%; }
-  50%      { width: 92%; }
+.bas-handle-grip::before,
+.bas-handle-grip::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
 }
-@keyframes ba-sweep-handle {
-  0%, 100% { left: 8%; }
-  50%      { left: 92%; }
+.bas-handle-grip::before {
+  border-width: 5px 7px 5px 0;
+  border-color: transparent #555 transparent transparent;
 }
-
-/* Opt-in, via .ba--animated. Only the hero slider sweeps: it is the one on
-   screen at load, where the hint is worth spending motion on. The four below
-   the fold stay parked at the 50% site.js sets — five sliders animating
-   forever is noise, and they are just as draggable without it. */
-.ba--animated .ba-after  { animation: ba-sweep-clip   4s ease-in-out infinite; }
-.ba--animated .ba-handle { animation: ba-sweep-handle 4s ease-in-out infinite; }
-
-/* Pause under the cursor so the comparison can actually be read... */
-@media (hover: hover) {
-  .ba--animated:hover .ba-after,
-  .ba--animated:hover .ba-handle { animation-play-state: paused; }
+.bas-handle-grip::after {
+  border-width: 5px 0 5px 7px;
+  border-color: transparent transparent transparent #555;
 }
-
-/* ...and drop the animation entirely once the visitor takes hold of it, so
-   their position sticks. Pressing the range focuses it, and that focus
-   outlives the drag, so :focus-within keeps the sweep off afterwards. */
-.ba--animated:active .ba-after,
-.ba--animated:active .ba-handle,
-.ba--animated:focus-within .ba-after,
-.ba--animated:focus-within .ba-handle { animation: none; }
-
-.ba-range {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: ew-resize;
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-}
-.ba-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 48px;
-  height: 100%;
-  cursor: ew-resize;
-}
-.ba-range::-moz-range-thumb {
-  width: 48px;
-  height: 100%;
-  border: 0;
-  cursor: ew-resize;
-}
-
-.ba-label {
-  position: absolute;
-  top: .75rem;
-  padding: .3rem .7rem;
-  background: rgba(9, 11, 11, .72);
-  color: var(--white);
-  border-radius: var(--radius-pill);
-  font-size: .75rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-.ba-label--before { left: .75rem; }
-.ba-label--after  { right: .75rem; }
 
 .ba-caption {
   font-family: var(--font-display);
@@ -753,19 +713,25 @@ button { font: inherit; color: inherit; }
 .carousel-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
 /* ---- Before & After gallery ------------------------------------------------
-   Each source image is a 695x250 panorama with the before/after pair, dates and
-   captions already baked in. The old 4-across carousel rendered them ~264px
-   wide, which made that baked-in detail unreadable, and hid half the cases
-   behind a horizontal scroll with no affordance.
-
-   A two-column grid gives each one ~540px — close to native size — and puts
-   every case on screen without scrolling sideways. */
+   Each case is a before/after slider. The photos were cropped out of the old
+   695x250 composites, so each half is only ~308x200px. The layout keeps every
+   slider close to that native width (one column on phones, then two, then
+   three) instead of stretching them soft. Flex rather than grid so the last
+   row of five centres. Replace with larger originals if the client has them. */
 .ba-gallery {
+  --gallery-gap: clamp(1.25rem, 1rem + 1.5vw, 2rem);
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gallery-gap);
+}
+.ba-gallery > li {
+  flex: 0 1 100%;
+  max-width: 440px;
+  min-width: 0;
 }
 
 .ba-gallery figure {
@@ -778,10 +744,12 @@ button { font: inherit; color: inherit; }
   height: 100%;
 }
 
-.ba-gallery img {
-  width: 100%;
-  height: auto;
-  display: block;
+/* The figure already rounds and clips; a second radius leaves a gap.
+   One shared ratio (the crops are 198–201px tall) keeps the captions in a
+   row level; `cover` trims at most a pixel or two. */
+.ba-gallery .bas-container {
+  border-radius: 0;
+  aspect-ratio: 308 / 200;
 }
 
 .ba-gallery figcaption {
@@ -801,51 +769,6 @@ button { font: inherit; color: inherit; }
   color: var(--gold);
 }
 .ba-gallery figcaption span { color: var(--muted); font-variant-numeric: tabular-nums; }
-
-/* --------------------------------------------------------------------------
-   13. Patient spotlight card
-   -------------------------------------------------------------------------- */
-.spotlight {
-  display: grid;
-  gap: 1.5rem;
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  padding: clamp(1.25rem, 1rem + 2vw, 2.5rem);
-  text-align: center;
-}
-.spotlight-avatar img {
-  width: 132px;
-  height: 132px;
-  margin-inline: auto;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--gold);
-}
-.spotlight-name {
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  color: var(--ink);
-  margin-top: .75rem;
-}
-.spotlight-title {
-  font-size: var(--fs-small);
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.stars { color: var(--gold); letter-spacing: .15em; font-size: 1.125rem; }
-.spotlight-quote + .spotlight-quote { margin-top: 1rem; }
-.spotlight-quote p { margin: 0; font-style: italic; }
-.spotlight-label {
-  display: inline-block;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--gold);
-  margin-right: .35em;
-}
 
 /* --------------------------------------------------------------------------
    14. Research / studies
@@ -946,61 +869,35 @@ button { font: inherit; color: inherit; }
 }
 
 /* --------------------------------------------------------------------------
-   16. Testimonials
+   16. Testimonials — patient videos (TikTok player embeds)
+   Phones: a horizontal scroll-snap row, so four 9:16 players don't stack
+   into ~2,300px of scrolling. Two-up from 640px, four-up from 1100px.
    -------------------------------------------------------------------------- */
-.quote-grid {
-  display: grid;
-  gap: 1.25rem;
-}
-.quote-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  padding: clamp(1.1rem, .9rem + 1.2vw, 1.75rem);
-  display: grid;
-  gap: .6rem;
-  align-content: start;
-}
-.quote-card .stars { font-size: 1rem; }
-
-/* Google review cards */
-.quote-grid { list-style: none; padding: 0; }
-
-.quote-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--mist);
-}
-.quote-name {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  color: var(--ink);
+.video-grid {
+  list-style: none;
   margin: 0;
+  padding: 0 0 .75rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
 }
-.quote-card blockquote p { margin-bottom: .75rem; }
-.quote-card blockquote b { color: var(--ink); font-weight: 700; }
-
-.quote-link {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  min-height: 44px;
-  margin-top: auto;
-  font-size: .875rem;
-  font-weight: 600;
-  color: var(--gold);
-  text-decoration: none;
+.video-grid > li {
+  flex: 0 0 78%;
+  min-width: 0;
+  scroll-snap-align: center;
 }
-.quote-link:hover { text-decoration: underline; }
-.quote-link img { flex: none; }
-.quote-card blockquote { margin: 0; }
-.quote-card blockquote p:first-child { font-weight: 600; }
-.quote-card cite {
-  font-style: normal;
-  font-weight: 600;
-  color: var(--gold);
+.video-grid iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--ink);
+  box-shadow: var(--shadow-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -1125,11 +1022,6 @@ button { font: inherit; color: inherit; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23DD9933'%3E%3Cpath d='M19 13H5v-2h14z'/%3E%3C/svg%3E");
 }
 .accordion .accordion-body { padding: 1rem; border-top: 1px solid var(--line); }
-
-/* Simple "Common Questions" list */
-.qa-list { display: grid; gap: 1rem; }
-.qa-list dt { font-weight: 700; color: var(--gold); }
-.qa-list dd { margin: .15rem 0 0; }
 
 /* --------------------------------------------------------------------------
    19. Booking + offer
@@ -1361,53 +1253,6 @@ body { padding-bottom: var(--mobile-cta-h); }   /* room for the sticky bar */
 }
 
 /* --------------------------------------------------------------------------
-   22. Dialogs
-   -------------------------------------------------------------------------- */
-dialog.modal {
-  width: min(560px, calc(100vw - 2rem));
-  max-height: min(88dvh, 900px);
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-}
-dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
-
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: var(--gold);
-  color: var(--white);
-}
-.modal-head h2 {
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  margin: 0;
-}
-.modal-close {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, .18);
-  border: 0;
-  border-radius: 50%;
-  color: var(--white);
-  font-size: 1.25rem;
-  cursor: pointer;
-}
-.modal-body {
-  padding: 1.25rem;
-  overflow-y: auto;
-  max-height: calc(88dvh - 72px);
-  -webkit-overflow-scrolling: touch;
-}
-
-/* --------------------------------------------------------------------------
    23. Legal / prose pages
    -------------------------------------------------------------------------- */
 .prose { max-width: 76ch; }
@@ -1434,7 +1279,9 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
 /* ≥ 640px — two-up grids start to make sense */
 @media (min-width: 40em) {
   .carousel-track { --slide-w: 46%; }
-  .quote-grid  { grid-template-columns: repeat(2, 1fr); }
+  .ba-gallery > li { flex-basis: calc((100% - var(--gallery-gap)) / 2); }
+  .video-grid  { flex-wrap: wrap; overflow-x: visible; padding-bottom: 0; }
+  .video-grid > li { flex: 0 0 calc((100% - 1rem) / 2); }
   .tabs-list   { grid-template-columns: repeat(2, 1fr); }
   .checklist   { gap: .65rem; }
   .hero-sub em { display: inline; }
@@ -1496,7 +1343,6 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
   .short-frame { max-width: none; margin-inline: 0; }
 
   .case-grid   { grid-template-columns: repeat(3, 1fr); }
-  .ba-gallery  { grid-template-columns: repeat(2, 1fr); }
   .carousel-track { --slide-w: 31%; }
   .contact-grid { grid-template-columns: 1fr 1fr; align-items: start; }
 
@@ -1507,20 +1353,13 @@ dialog.modal::backdrop { background: rgba(9, 11, 11, .65); }
     gap: 1.5rem;
   }
 
-  .spotlight {
-    grid-template-columns: 220px 1fr;
-    text-align: left;
-    align-items: center;
-  }
-  .spotlight-avatar img { margin-inline: 0; }
-  .stars { display: block; }
-
   .tabs-list { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ≥ 1100px — final polish */
 @media (min-width: 68.75em) {
-  .quote-grid  { grid-template-columns: repeat(3, 1fr); }
+  .ba-gallery > li { flex-basis: calc((100% - 2 * var(--gallery-gap)) / 3); }
+  .video-grid > li { flex-basis: calc((100% - 3rem) / 4); }
   .carousel-track { --slide-w: 23.5%; }
 }
 

@@ -69,18 +69,16 @@ a clean seam. Suggested split into `src/components/home/`:
 | --- | --- |
 | `Hero.astro` | `.hero` |
 | `InventorStrip.astro` | first `.section--mist` with `.inventor` — carries the 9:16 YouTube Short facade |
-| `CaseGrid.astro` | the three `.ba` figures + case carousel |
+| `CaseGrid.astro` | the three `.bas-container` slider figures |
 | `WhatIsPinhole.astro` | `#pinhole` |
-| `PatientSpotlight.astro` | `.spotlight` |
 | `CtaBand.astro` | the repeated `.section--gold` CTA (used 3×) |
 | `Research.astro` | `#research` |
 | `GumRecession.astro` | `#gum-recession` |
-| `Symptoms.astro` | the symptoms `.ba` + checklist |
+| `Symptoms.astro` | the symptoms slider + checklist |
 | `CompareTable.astro` | `.compare` |
 | `Gallery.astro` | `#gallery` |
-| `Testimonials.astro` | `#testimonials` |
+| `Testimonials.astro` | `#testimonials` — four TikTok player embeds |
 | `MediaTabs.astro` | the `[data-tabs]` block |
-| `CommonQuestions.astro` | the `.qa-list` section |
 | `MeetTheDoctor.astro` | `#doctor` |
 | `Booking.astro` | `#book` — GHL iframe (needs `form_embed.js`) + offer countdown |
 | `Faq.astro` | `#faq` |
@@ -89,16 +87,14 @@ a clean seam. Suggested split into `src/components/home/`:
 Three repeat with different copy and are the best candidates for props:
 
 - `CtaBand` — appears 3× with the same buttons, differing headline.
-- `BeforeAfter` — 5 instances; props: `beforeSrc`, `afterSrc`, `beforeLabel`,
-  `afterLabel`, `caption`, `alt`.
+- `BeforeAfter` — 10 instances; props: `beforeSrc`, `afterSrc`, `beforeLabel`,
+  `afterLabel`, `ratio`, `label`, `caption`. Renders the `data-bas` div that
+  `site.js` builds the slider into.
 - `Carousel` — 2 instances; slot in the slides, prop the aria-labels.
-
-The one remaining dialog (`#reviews-dialog`) goes into the `dialogs` slot of
-`BaseLayout`.
 
 Content that is currently inline and would be better as data:
 
-- `src/data/testimonials.json` — the 4 homepage quotes + the 14 in the dialog.
+- `src/data/testimonials.json` — the 4 TikTok video IDs and their titles.
 - `src/data/faq.json` — the 12 accordion entries.
 - `src/data/studies.json` — the 3 published papers.
 
