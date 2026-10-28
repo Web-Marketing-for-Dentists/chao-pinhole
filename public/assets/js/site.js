@@ -397,10 +397,16 @@
         var id = btn.getAttribute('data-video');
         if (!id) return;
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        var embedSrc = btn.getAttribute('data-embed-src');
+        iframe.src = embedSrc
+          ? embedSrc + '&autoplay=1&rel=0'
+          : 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
         iframe.title = btn.getAttribute('data-title') || 'Video';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.width = '560';
+        iframe.height = '315';
         iframe.loading = 'lazy';
         btn.replaceWith(iframe);
       });
@@ -472,6 +478,62 @@
     targets.forEach(function (t) { observer.observe(t); });
   }
 
+  /* TikTok players: pause off-screen media and avoid competing playback.
+     Validate both the message origin and the exact iframe window. */
+  function initTikTokPlayers() {
+    var players = $$('.social-frame iframe');
+    if (!players.length) return;
+    var readyPlayers = new Set();
+    var autoplayed = new Set();
+    function pause(frame) {
+      if (frame.contentWindow) frame.contentWindow.postMessage({
+        type: 'pause', 'x-tiktok-player': true
+      }, 'https://www.tiktok.com');
+    }
+    function autoplayVisible(frame) {
+      if (document.hidden || !readyPlayers.has(frame) || autoplayed.has(frame)) return;
+      if (!/[?&]autoplay=1(?:&|$)/.test(frame.src)) return;
+      autoplayed.add(frame);
+      frame.contentWindow.postMessage({ type: 'play', 'x-tiktok-player': true }, 'https://www.tiktok.com');
+    }
+    on(window, 'message', function (event) {
+      if (event.origin !== 'https://www.tiktok.com') return;
+      var active = players.find(function (frame) { return frame.contentWindow === event.source; });
+      if (!active || !event.data || event.data['x-tiktok-player'] !== true) return;
+      if (event.data.type === 'onStateChange' && event.data.value === 1) {
+        players.forEach(function (frame) { if (frame !== active) pause(frame); });
+      }
+      if (event.data.type === 'onPlayerReady') {
+        readyPlayers.add(active);
+        var rect = active.getBoundingClientRect();
+        if (rect.top >= window.innerHeight || rect.bottom <= 0) pause(active);
+        else autoplayVisible(active);
+      }
+    });
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) autoplayVisible(entry.target);
+          else pause(entry.target);
+        });
+      }, { threshold: 0 });
+      players.forEach(function (frame) { observer.observe(frame); });
+    }
+    on(document, 'visibilitychange', function () {
+      if (document.hidden) players.forEach(pause);
+    });
+  }
+
+  /* Record intent only, never medical or personal details. Existing GA4 owns
+     delivery; calls and anchor navigation are never delayed or intercepted. */
+  function initPrimaryActionTracking() {
+    on(document, 'click', function (event) {
+      var link = event.target.closest && event.target.closest('a[data-cta]');
+      if (!link || typeof window.gtag !== 'function') return;
+      window.gtag('event', 'primary_cta_click', { cta_location: link.getAttribute('data-cta') });
+    });
+  }
+
   /* ------------------------------------------------------------------------
      Boot
      ------------------------------------------------------------------------ */
@@ -482,6 +544,8 @@
     initCarousels();
     initTabs();
     initYouTubeFacades();
+    initTikTokPlayers();
+    initPrimaryActionTracking();
     initCountdown();
     initScrollSpy();
     on(window, 'resize', syncHeaderHeight);
