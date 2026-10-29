@@ -83,7 +83,7 @@ wildcard. **If you add a page, add its `Cache-Control` line too.**
 
 Assets are cached immutably for a year, so `site.css` and `site.js` are linked
 with a `?v=N` query. **Bump `N` in every HTML file whenever you edit either
-file**, or returning visitors keep the old copy. Currently at `v=15`.
+file**, or returning visitors keep the old copy. Currently at `v=16`.
 
 ## Verified before handoff
 
@@ -108,9 +108,8 @@ Three things genuinely cannot be verified from localhost:
    `postMessage` that is domain-gated; on localhost it never fires and the frame
    falls back to a 600px `min-height`. Confirm the calendar renders at its full
    height.
-2. **The chat widget's expanded state.** The invitation bubble is verified clear
-   of the fixed mobile call/book bar, but the opened chat window needs a live
-   agent session. Confirm its header is not clipped on a phone.
+2. **A real chat message.** Send one from the live site and confirm it reaches
+   this account's GHL inbox with `[PAGE_URL:…]` appended.
 3. **WhatConverts number swapping** against the production domain and its
    campaign rules.
 

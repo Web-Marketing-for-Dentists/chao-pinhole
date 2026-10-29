@@ -124,7 +124,7 @@ Three scripts must survive the migration verbatim and stay on every page:
 | Script | Constraint |
 | --- | --- |
 | `src/components/Analytics.astro` | GA4 + WhatConverts + Meta Pixel. Already rendered from `BaseLayout`. The `$wc_leads` bootstrap must stay immediately before `141394.js`. |
-| `src/components/ChatWidget.astro` | SellWithChat. Already rendered from `BaseLayout`. |
+| `src/components/ChatWidget.astro` | GoHighLevel chat via the hosted `ghl-chat` loader. Already rendered from `BaseLayout`, whose mobile bar carries the Chat button. |
 | GHL `form_embed.js` | `https://link.msgsndr.com/js/form_embed.js` — sizes the booking iframe. Only needed on pages carrying the calendar. |
 
 Use `is:inline` on all of them so Astro emits them as-is rather than bundling

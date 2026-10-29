@@ -1,15 +1,22 @@
 ---
 /**
- * SellWithChat live chat widget (an ApexChat white-label).
+ * GoHighLevel chat via WM4D's hosted loader
+ * (github.com/Web-Marketing-for-Dentists/ghl-chat).
  *
- * The widget renders its own launcher/CTA, so there is nothing to style and no
- * chat card in the contact section. It must be present on every page —
- * BaseLayout renders this before the site script.
+ * v1.js loads the GHL widget, opens it once per session, tags the first
+ * message with the landing URL, and hides GHL's bubble below 900px, where the
+ * mobile bar's Chat button ([data-chat-open]) opens it instead. It must be
+ * present on every page — BaseLayout renders this before the site script.
  *
  * `is:inline` so Astro emits the tag verbatim instead of bundling it.
- * The protocol-relative URL is the vendor's snippet as supplied; on the live
- * HTTPS domain it resolves to HTTPS.
  */
 ---
 
-<script is:inline src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
+<script
+  is:inline
+  defer
+  src="https://ghl-chat.whitney-fad.workers.dev/v1.js"
+  data-ghl-widget-id="6ae0f05c8147ba697cbb0bfe"
+  data-auto-open="true"
+  data-hide-bubble-below="900"
+></script>

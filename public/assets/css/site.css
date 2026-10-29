@@ -50,8 +50,7 @@
   /* Height of the sticky header, kept in sync by JS for anchor offsets */
   --header-h: 76px;
 
-  /* Height of the fixed mobile call/book bar. Also used to lift the chat
-     widget clear of it — keep the two in sync. */
+  /* Height of the fixed mobile call/chat/book bar. */
   --mobile-cta-h: 54px;
 
   /* Animated CTA outline. Symmetrical so the 0%->100% sweep loops seamlessly. */
@@ -1224,19 +1223,20 @@ button { font: inherit; color: inherit; }
   margin-top: 1.25rem;
 }
 
-/* Sticky mobile call bar */
+/* Sticky mobile call / chat / book bar */
 .mobile-cta {
   position: fixed;
   inset: auto 0 0 0;
   z-index: 90;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: rgba(255, 255, 255, .2);
   box-shadow: 0 -4px 18px rgba(0, 0, 0, .25);
   padding-bottom: env(safe-area-inset-bottom);
 }
-.mobile-cta a {
+.mobile-cta a,
+.mobile-cta button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1247,25 +1247,26 @@ button { font: inherit; color: inherit; }
   text-decoration: none;
   color: var(--white);
 }
+.mobile-cta button {
+  border: 0;
+  padding: 0;
+  background: var(--navy);
+  font-family: inherit;
+  cursor: pointer;
+}
 .mobile-cta a:first-child { background: var(--rose); }
 .mobile-cta a:last-child  { background: var(--gold); color: var(--ink); }
 .mobile-cta svg { width: 18px; height: 18px; fill: currentColor; }
 
 body { padding-bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)); }   /* room for the sticky bar */
 
-/* ---- SellWithChat / ApexChat -------------------------------------------
-   The widget anchors both its invitation bubble and its chat window to
-   bottom:0, which puts them straight on top of the fixed call/book bar.
-   Lift both clear of it on mobile. Vendor styles are high-specificity, so
-   these need !important; the max-height stops the taller chat window from
-   pushing its own header off the top of the screen.
-   Selectors are the vendor's element IDs — re-check them if the widget is
-   ever swapped or upgraded. */
-#apexchat_prechat_invitation_wrapper,
-#apexchat_dompopup_chatwindow_frame {
-  bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)) !important;
-  max-height: calc(100dvh - var(--mobile-cta-h) - env(safe-area-inset-bottom)) !important;
-}
+/* ---- GoHighLevel chat ---------------------------------------------------
+   Loaded by ghl-chat's v1.js. Below 900px it hides GHL's floating bubble
+   (data-hide-bubble-below="900", matching the bar's breakpoint) and the bar's
+   Chat button ([data-chat-open]) opens the chat instead. While the chat
+   window is open v1.js sets <html data-chat="open">: tuck the bar away so it
+   does not cover the window's message box. */
+html[data-chat="open"] .mobile-cta { display: none; }
 
 /* --------------------------------------------------------------------------
    23. Legal / prose pages
@@ -1582,46 +1583,6 @@ body { padding-bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)); 
   gap: .75rem;
 }
 
-.social-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding: .7em 1.2em;
-  border: 1px solid transparent;
-  border-radius: var(--radius-pill, 50px);
-  font-family: var(--font-body, Montserrat, sans-serif);
-  font-size: .875rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-  transition: transform .15s, background-color .2s, color .2s, border-color .2s;
-}
-
-.social-action:hover {
-  transform: translateY(-1px);
-}
-
-.social-action-primary {
-  color: #0d1b2a;
-  background: var(--social-gradient);
-}
-
-.social-action-primary:hover {
-  color: #090b0b;
-}
-
-.social-action-call {
-  color: var(--white, #fff);
-  border-color: rgba(255, 255, 255, .48);
-}
-
-.social-action-call:hover {
-  border-color: #26F1E7;
-  color: #26F1E7;
-}
-
 .social-sr-only {
   position: absolute;
   width: 1px;
@@ -1648,7 +1609,7 @@ body { padding-bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)); 
     width: 100%;
   }
 
-  .social-action {
+  .social-action-row .btn {
     width: 100%;
   }
 }
@@ -1688,14 +1649,6 @@ body { padding-bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)); 
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .social-action {
-    transition: none;
-  }
-}
-
-.hero-book { --btn-bg: transparent; --btn-fg: var(--ink); border-color: #b9a78b; }
-.hero-book:hover { background: #ede4d6; }
 
 /*
  * Results / before-and-after cards
@@ -1850,13 +1803,6 @@ body { padding-bottom: calc(var(--mobile-cta-h) + env(safe-area-inset-bottom)); 
   .mobile-cta,
   .header-callbar { display: none; }
   /* .nav-toggle stays visible — the menu is a popup at every width now. */
-
-  /* No bar on desktop — hand the chat widget its own corner back */
-  #apexchat_prechat_invitation_wrapper,
-  #apexchat_dompopup_chatwindow_frame {
-    bottom: 0 !important;
-    max-height: none !important;
-  }
 
   .header-main {
     grid-template-columns: auto 1fr auto;

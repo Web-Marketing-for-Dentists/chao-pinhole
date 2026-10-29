@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Hero before/after slider: site.js paints these as CSS backgrounds, which
      the browser would otherwise only discover after the script runs. -->
-<link rel="preload" as="image" href="/assets/img/ba-sharon-before.webp">
-<link rel="preload" as="image" href="/assets/img/ba-sharon-after.webp">
+<link rel="preload" as="image" href="/assets/img/ba-sharon-hero-before.webp">
+<link rel="preload" as="image" href="/assets/img/ba-sharon-hero-after.webp">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Google tag (gtag.js) — GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8V0B4FHSPH"></script>
@@ -56,7 +56,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 
-<link rel="stylesheet" href="/assets/css/site.css?v=15">
+<link rel="stylesheet" href="/assets/css/site.css?v=16">
 
 <script type="application/ld+json">
 {
@@ -132,11 +132,11 @@
     </a>
 
     <div class="header-actions">
-      <a class="btn btn--rose" href="tel:+16265482891">
+      <a class="btn btn--rose btn--glow" href="tel:+16265482891">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
         (626) 548-2891
       </a>
-      <a class="btn" href="#book">Book Appointment</a>
+      <a class="btn btn--glow" href="#book">Book Appointment</a>
 
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu" aria-haspopup="true">
         <span></span><span></span><span></span>
@@ -172,8 +172,8 @@
         <p class="hero-sub">Treat gum recession.<em>Without gum grafting.</em></p>
         <p class="hero-intro">Scalpel-free, suture-free care that uses your own gum tissue. Discover a different way to restore your gumline.</p>
         <div class="btn-row">
-          <a class="btn btn--rose" href="tel:+16265482891" data-cta="hero-call">Call (626) 548-2891</a>
-          <a class="btn hero-book" href="#book" data-cta="hero-book">Book Your Consultation</a>
+          <a class="btn btn--rose btn--glow" href="tel:+16265482891" data-cta="hero-call">Call (626) 548-2891</a>
+          <a class="btn btn--glow" href="#book" data-cta="hero-book">Book Your Consultation</a>
         </div>
         <p class="hero-meta">Talk with a Gum Rejuvenation Advisor. Find out if you’re a candidate.</p>
       </div>
@@ -183,11 +183,11 @@
         <p class="hero-card-note">One patient’s gumline, 14 years later.<br>Individual results may vary.</p>
 
         <div class="bas-container" data-bas
-             data-before="/assets/img/ba-sharon-before.webp" data-after="/assets/img/ba-sharon-after.webp"
+             data-before="/assets/img/ba-sharon-hero-before.webp" data-after="/assets/img/ba-sharon-hero-after.webp"
              data-before-label="Before" data-after-label="14 Years Later"
              style="--bas-ratio:500/325"
              aria-label="Before and after: gum recession before Pinhole Gum Rejuvenation, and the same gum line 14 years later">
-          <noscript><img src="/assets/img/ba-sharon-after.webp" alt="The same gum line 14 years after Pinhole Gum Rejuvenation" width="500" height="325"></noscript>
+          <noscript><img src="/assets/img/ba-sharon-hero-after.webp" alt="The same gum line 14 years after Pinhole Gum Rejuvenation" width="500" height="325"></noscript>
         </div>
 
         <ul class="checklist">
@@ -230,7 +230,7 @@
 
       <div class="treatment-action">
         <div class="btn-row">
-          <a class="btn btn--rose" href="#book" data-cta="treatment-book">See if Pinhole is right for you</a>
+          <a class="btn btn--glow" href="#book" data-cta="treatment-book">See if Pinhole is right for you</a>
           <a class="treatment-call" href="tel:+16265482891" data-cta="treatment-call">Questions? Call (626) 548-2891</a>
         </div>
         <p class="treatment-fineprint">A consultation determines whether you’re a candidate. Treatment and recovery vary by patient.</p>
@@ -356,6 +356,102 @@
   </section>
 
   <!-- ====================================================================
+       Testimonials
+       ==================================================================== -->
+  <section class="section section--mist" id="testimonials" aria-labelledby="testimonials-h">
+    <div class="shell">
+      <p class="eyebrow center" style="font-weight:300">What People Say</p>
+      <h2 id="testimonials-h" class="display center" style="margin-bottom:1.75rem">Join the Hundreds of Happy Patients</h2>
+
+      <!-- TikTok player embeds, as supplied (autoplay, muted). loading="lazy"
+           keeps them from loading until the section nears the viewport.
+           Titles are short descriptions: screen readers announce them. -->
+      <ul class="video-grid">
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7425821271553821982?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: experience one day after Pinhole treatment" allowfullscreen loading="lazy"></iframe>
+        </li>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7431645039131954463?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Rocio's new smile revealed on The Doctors" allowfullscreen loading="lazy"></iframe>
+        </li>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7417995702086782238?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: a happy patient's Pinhole results" allowfullscreen loading="lazy"></iframe>
+        </li>
+        <li>
+          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7418707463521733930?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Nancy's visit with Dr. Chao's team" allowfullscreen loading="lazy"></iframe>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+<section class="social-section section" id="social" aria-labelledby="social-heading">
+  <div class="shell social-shell">
+    <div class="social-panel">
+      <header class="social-header">
+        <div class="social-heading-row">
+          <div>
+            <p class="social-eyebrow">Follow the conversation</p>
+            <h2 class="social-heading" id="social-heading">A closer look at <span>Pinhole.</span></h2>
+          </div>
+          <a class="social-follow" href="https://www.tiktok.com/@drjohnchao" target="_blank" rel="noopener noreferrer">
+            Follow @drjohnchao<span class="social-sr-only"> on TikTok (opens in a new tab)</span>
+          </a>
+        </div>
+        <p class="social-intro">Get to know Pinhole Gum Rejuvenation® through short videos from Dr. John Chao. Watch here, then ask us what it could mean for your smile.</p>
+      </header>
+
+      <div class="social-videos" aria-label="Videos from Dr. John Chao on TikTok">
+        <article class="social-card">
+          <h3 class="social-card-heading">From Dr. Chao</h3>
+          <div class="social-frame">
+            <iframe
+              src="https://www.tiktok.com/player/v1/7699587021702008077?autoplay=0&amp;music_info=1&amp;description=1&amp;controls=1&amp;rel=0"
+              title="TikTok video from Dr. John Chao: From Dr. Chao"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              allowfullscreen></iframe>
+          </div>
+          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7699587021702008077" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: From Dr. Chao (opens in a new tab)</span></a>
+        </article>
+
+        <article class="social-card">
+          <h3 class="social-card-heading">Pinhole perspectives</h3>
+          <div class="social-frame">
+            <iframe
+              src="https://www.tiktok.com/player/v1/7697006722115816718?autoplay=0&amp;music_info=1&amp;description=1&amp;controls=1&amp;rel=0"
+              title="TikTok video from Dr. John Chao: Pinhole perspectives"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              allowfullscreen></iframe>
+          </div>
+          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7697006722115816718" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: Pinhole perspectives (opens in a new tab)</span></a>
+        </article>
+
+        <article class="social-card">
+          <h3 class="social-card-heading">Inside Pinhole</h3>
+          <div class="social-frame">
+            <iframe
+              src="https://www.tiktok.com/player/v1/7288738629940399406?music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1&amp;embed_from=webapp_share"
+              title="TikTok video from Dr. John Chao: Inside Pinhole"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
+              allowfullscreen></iframe>
+          </div>
+          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7288738629940399406" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: Inside Pinhole (opens in a new tab)</span></a>
+        </article>
+      </div>
+
+      <footer class="social-actions">
+        <p class="social-consultation">Your smile is personal. Let’s talk about your options. A consultation determines candidacy; results vary.</p>
+        <div class="social-action-row">
+          <a class="btn btn--glow" href="#book" data-cta="social-book">See if Pinhole is right for you</a>
+          <a class="btn btn--rose btn--glow" href="tel:+16265482891" data-cta="social-call">Call (626) 548-2891</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
+
+  <!-- ====================================================================
        Research
        ==================================================================== -->
   <section class="section section--cream" id="research" aria-labelledby="research-h">
@@ -363,6 +459,10 @@
       <h2 id="research-h" class="display center" style="margin-bottom:1.75rem">
         Published in International Academic Journals
       </h2>
+
+      <p class="center lede" style="max-width:62ch;margin:0 auto 2rem">
+        Discover the peer-reviewed medical publications on the Pinhole® Surgical Technique.
+      </p>
 
       <article class="study">
         <h3>Long-term Retrospective Case Series of the Pinhole® Surgical Technique</h3>
@@ -598,103 +698,6 @@
       </ul>
     </div>
   </section>
-
-  <!-- ====================================================================
-       Testimonials
-       ==================================================================== -->
-  <section class="section section--mist" id="testimonials" aria-labelledby="testimonials-h">
-    <div class="shell">
-      <p class="eyebrow center" style="font-weight:300">What People Say</p>
-      <h2 id="testimonials-h" class="display center" style="margin-bottom:1.75rem">Join the Hundreds of Happy Patients</h2>
-
-      <!-- TikTok player embeds, as supplied (autoplay, muted). loading="lazy"
-           keeps them from loading until the section nears the viewport.
-           Titles are short descriptions: screen readers announce them. -->
-      <ul class="video-grid">
-        <li>
-          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7425821271553821982?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: experience one day after Pinhole treatment" allowfullscreen loading="lazy"></iframe>
-        </li>
-        <li>
-          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7431645039131954463?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Rocio's new smile revealed on The Doctors" allowfullscreen loading="lazy"></iframe>
-        </li>
-        <li>
-          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7417995702086782238?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: a happy patient's Pinhole results" allowfullscreen loading="lazy"></iframe>
-        </li>
-        <li>
-          <iframe height="578" width="325" src="https://www.tiktok.com/player/v1/7418707463521733930?embed_from=webapp_share&amp;music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" title="Patient video: Nancy's visit with Dr. Chao's team" allowfullscreen loading="lazy"></iframe>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-<section class="social-section section" id="social" aria-labelledby="social-heading">
-  <div class="shell social-shell">
-    <div class="social-panel">
-      <header class="social-header">
-        <div class="social-heading-row">
-          <div>
-            <p class="social-eyebrow">Follow the conversation</p>
-            <h2 class="social-heading" id="social-heading">A closer look at <span>Pinhole.</span></h2>
-          </div>
-          <a class="social-follow" href="https://www.tiktok.com/@drjohnchao" target="_blank" rel="noopener noreferrer">
-            Follow @drjohnchao<span class="social-sr-only"> on TikTok (opens in a new tab)</span>
-          </a>
-        </div>
-        <p class="social-intro">Get to know Pinhole Gum Rejuvenation® through short videos from Dr. John Chao. Watch here, then ask us what it could mean for your smile.</p>
-      </header>
-
-      <div class="social-videos" aria-label="Videos from Dr. John Chao on TikTok">
-        <article class="social-card">
-          <h3 class="social-card-heading">From Dr. Chao</h3>
-          <div class="social-frame">
-            <iframe
-              src="https://www.tiktok.com/player/v1/7699587021702008077?autoplay=0&amp;music_info=1&amp;description=1&amp;controls=1&amp;rel=0"
-              title="TikTok video from Dr. John Chao: From Dr. Chao"
-              loading="lazy"
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
-              allowfullscreen></iframe>
-          </div>
-          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7699587021702008077" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: From Dr. Chao (opens in a new tab)</span></a>
-        </article>
-
-        <article class="social-card">
-          <h3 class="social-card-heading">Pinhole perspectives</h3>
-          <div class="social-frame">
-            <iframe
-              src="https://www.tiktok.com/player/v1/7697006722115816718?autoplay=0&amp;music_info=1&amp;description=1&amp;controls=1&amp;rel=0"
-              title="TikTok video from Dr. John Chao: Pinhole perspectives"
-              loading="lazy"
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
-              allowfullscreen></iframe>
-          </div>
-          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7697006722115816718" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: Pinhole perspectives (opens in a new tab)</span></a>
-        </article>
-
-        <article class="social-card">
-          <h3 class="social-card-heading">Inside Pinhole</h3>
-          <div class="social-frame">
-            <iframe
-              src="https://www.tiktok.com/player/v1/7288738629940399406?music_info=1&amp;description=1&amp;autoplay=1&amp;muted=1&amp;embed_from=webapp_share"
-              title="TikTok video from Dr. John Chao: Inside Pinhole"
-              loading="lazy"
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen"
-              allowfullscreen></iframe>
-          </div>
-          <a class="social-video-link" href="https://www.tiktok.com/@drjohnchao/video/7288738629940399406" target="_blank" rel="noopener noreferrer">Watch on TikTok<span class="social-sr-only">: Inside Pinhole (opens in a new tab)</span></a>
-        </article>
-      </div>
-
-      <footer class="social-actions">
-        <p class="social-consultation">Your smile is personal. Let’s talk about your options. A consultation determines candidacy; results vary.</p>
-        <div class="social-action-row">
-          <a class="social-action social-action-primary" href="#book" data-cta="social-book">See if Pinhole is right for you</a>
-          <a class="social-action social-action-call" href="tel:+16265482891" data-cta="social-call">Call (626) 548-2891</a>
-        </div>
-      </footer>
-    </div>
-  </div>
-</section>
-
 
   <!-- ====================================================================
        Media features
@@ -1038,6 +1041,10 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>
     Call Us
   </a>
+  <button type="button" data-chat-open>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+    Chat
+  </button>
   <a href="#book">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm12 8v10H5V10h14z"/></svg>
     Book Now
@@ -1048,10 +1055,14 @@
 <!-- GoHighLevel: auto-sizes the booking iframe to its content height -->
 <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
 
-<!-- SellWithChat live chat widget (carries its own CTA) -->
-<script src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
+<!-- GoHighLevel chat via WM4D's hosted loader (github.com/Web-Marketing-for-Dentists/ghl-chat).
+     Below 900px the bubble is hidden: the mobile bar's Chat button opens it instead. -->
+<script defer src="https://ghl-chat.whitney-fad.workers.dev/v1.js"
+  data-ghl-widget-id="6ae0f05c8147ba697cbb0bfe"
+  data-auto-open="true"
+  data-hide-bubble-below="900"></script>
 
-<script src="/assets/js/site.js?v=15" defer></script>
+<script src="/assets/js/site.js?v=16" defer></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

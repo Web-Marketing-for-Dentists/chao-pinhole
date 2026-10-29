@@ -42,7 +42,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=2717228771967714&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
 
-<link rel="stylesheet" href="/assets/css/site.css?v=15">
+<link rel="stylesheet" href="/assets/css/site.css?v=16">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -64,8 +64,8 @@
       <span>100 South 1st Street<br>Alhambra, CA 91801</span>
     </a>
     <div class="header-actions">
-      <a class="btn btn--rose" href="tel:+16265482891">(626) 548-2891</a>
-      <a class="btn" href="/#book">Book Appointment</a>
+      <a class="btn btn--rose btn--glow" href="tel:+16265482891">(626) 548-2891</a>
+      <a class="btn btn--glow" href="/#book">Book Appointment</a>
     </div>
   </div>
 </header>
@@ -96,13 +96,18 @@
 
 <div class="mobile-cta">
   <a href="tel:+16265482891">Call Us</a>
+  <button type="button" data-chat-open>Chat</button>
   <a href="/#book">Book Now</a>
 </div>
 
-<!-- SellWithChat live chat widget (carries its own CTA) -->
-<script src="//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic" async></script>
+<!-- GoHighLevel chat via WM4D's hosted loader (github.com/Web-Marketing-for-Dentists/ghl-chat).
+     Below 900px the bubble is hidden: the mobile bar's Chat button opens it instead. -->
+<script defer src="https://ghl-chat.whitney-fad.workers.dev/v1.js"
+  data-ghl-widget-id="6ae0f05c8147ba697cbb0bfe"
+  data-auto-open="true"
+  data-hide-bubble-below="900"></script>
 
-<script src="/assets/js/site.js?v=15" defer></script>
+<script src="/assets/js/site.js?v=16" defer></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

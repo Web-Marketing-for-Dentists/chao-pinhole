@@ -74,7 +74,7 @@ a comma, not overridden — so exactly one `Cache-Control` may match a path. HTM
 routes are listed individually. **Add a line when you add a page.**
 
 Assets are cached immutably for a year, hence the `?v=N` on the CSS/JS links.
-**Bump it in every HTML file when you change either file.** Currently `v=15`.
+**Bump it in every HTML file when you change either file.** Currently `v=16`.
 
 After the Astro migration, switch the build command to `npm run astro:build`
 and the output directory to `dist`. See [docs/MIGRATION.md](docs/MIGRATION.md).
@@ -96,7 +96,9 @@ Function was removed along with the forms.
 
 - **Call** — `tel:+16265482891`, in the header, the sticky mobile bar, every CTA
   band, and the contact section.
-- **Chat** — SellWithChat widget, loaded on every page. It renders its own CTA.
+- **Chat** — GoHighLevel chat (widget `6ae0f05c8147ba697cbb0bfe`) via WM4D's
+  hosted `ghl-chat` loader, on every page. Below 900px the sticky bar's Chat
+  button opens it; above that, GHL's own bubble does.
 - **Schedule** — the GoHighLevel calendar at `#book`
   (widget `TX1hD6n3spgsECdh6ev9`, auto-sized by `form_embed.js`).
 
@@ -104,10 +106,8 @@ Function was removed along with the forms.
 
 Detail in `docs/REBUILD-NOTES.md`; the open items in short:
 
-1. **Open a real chat on mobile.** The invitation bubble is verified clear of
-   the fixed call/book bar, but the expanded chat window couldn't be triggered
-   locally — confirm its header isn't clipped. The offset rule targets vendor
-   element IDs, so re-check it if the widget is ever upgraded.
+1. **Send a real chat message.** Confirm it lands in this account's GHL inbox
+   with `[PAGE_URL:…]` appended, which the loader adds to the first message.
 2. **Confirm the GHL calendar auto-sizes on the real domain.** `form_embed.js`
    is in place but its resize message is domain-gated and didn't fire on
    localhost; the frame falls back to a 600px min-height.

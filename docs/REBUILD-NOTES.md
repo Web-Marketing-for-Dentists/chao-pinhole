@@ -134,35 +134,37 @@ The "schedule" card is styled as the primary action.
 
 ### Chat
 
-`//sellwithchat.com/scripts/invitation.ashx?company=thepinholeclinic`, loaded on
-every page before `site.js`. The widget renders its own CTA, so there is no chat
-card in the contact section and nothing to style.
+GoHighLevel chat, widget `6ae0f05c8147ba697cbb0bfe`, loaded on every page
+before `site.js` through WM4D's hosted loader:
 
-The original WordPress site had **no chat widget at all** — this is new.
+```html
+<script defer src="https://ghl-chat.whitney-fad.workers.dev/v1.js"
+  data-ghl-widget-id="6ae0f05c8147ba697cbb0bfe"
+  data-auto-open="true"
+  data-hide-bubble-below="900"></script>
+```
 
-Verified loading: the script resolves and chains out to
-`invitation.apexchat.com` and `v2.vialivechat.com` (SellWithChat is an ApexChat
-white-label), so it initialises rather than just 200-ing.
+It replaced a SellWithChat (ApexChat) widget. The original WordPress site had
+no chat at all. Loader source and its full attribute list:
+`github.com/Web-Marketing-for-Dentists/ghl-chat` (`README.md`).
 
-The snippet is protocol-relative (`//sellwithchat.com/...`) exactly as supplied.
-On the live HTTPS domain that resolves to HTTPS.
+What the loader does here:
 
-**It collided with the fixed mobile call/book bar.** Both the invitation bubble
-(`#apexchat_prechat_invitation_wrapper`) and the chat window
-(`#apexchat_dompopup_chatwindow_frame`) anchor to `bottom: 0` at
-`z-index: 9999999`, landing on top of the bar — the agent avatar sat over the
-"Book Now" button. Section 21 of `site.css` lifts both by `--mobile-cta-h`
-below the 900px breakpoint and resets them to `bottom: 0` above it, where there
-is no bar. Measured overlap after the fix: 0px.
+- Opens the chat once per browser session, 3 seconds after load.
+- Appends the landing URL (with gclid/UTMs) to the visitor's first message as
+  `[PAGE_URL:…]`.
+- **Below 900px** hides GHL's floating bubble, which would otherwise sit on top
+  of the fixed call/book bar. The bar gains a third cell, **Chat**
+  (`<button data-chat-open>`), which the loader wires to open the widget. 900px
+  is the bar's own breakpoint (`56.25em`), so there is always exactly one way
+  in: the bar's button on phones, GHL's bubble on desktop.
+- While the chat window is open it sets `<html data-chat="open">`;
+  `site.css` hides the bar then so it doesn't cover the message box.
 
-Two caveats on that fix:
-
-- It targets **vendor element IDs**. If the widget is swapped or upgraded, re-check
-  those selectors — the rule fails silently if the IDs change.
-- Only the **invitation bubble** state could be tested here. The expanded chat
-  window never rendered (it needs a live agent session), so its `max-height`
-  clamp is unverified. Open a real chat on mobile once this is live and confirm
-  the window header isn't pushed off the top of the screen.
+Caveat: the auto-open, the bubble hiding and the `[PAGE_URL:…]` tag rely on
+undocumented GHL internals (listed in the loader's README). If any of them stop
+working, fix it once in `ghl-chat` — every WM4D site picks it up within five
+minutes.
 
 ### Offer countdown
 
@@ -206,18 +208,23 @@ the `.bas-*` rules, section 11 of `site.css`). Five are the hero, the
 
 | Slider | Before (left) | After (right) |
 | --- | --- | --- |
-| Hero — "14 Years Later" | `ba-sharon-before.webp` | `ba-sharon-after.webp` |
+| Hero — "14 Years Later" | `ba-sharon-hero-before.webp` | `ba-sharon-hero-after.webp` |
 | 3-Year Case | `ba-eliza-before.webp` | `ba-eliza-after.webp` |
 | 10-Year Case | `ba-rocio-before.webp` | `ba-rocio-after.webp` |
 | 6-Year Case | `ba-rodney-before.webp` | `ba-rodney-after.webp` |
 | Symptoms | `ba-czarina-before.webp` | `ba-czarina-after.webp` |
 | Gallery ×5 | `gallery-<name>-before.webp` | `gallery-<name>-after.webp` |
 
-**The Sharon pair was renamed in October 2026.** The CDN filenames were
-mislabelled at source (the WordPress "after" file shows the recession), and the
-markup used to compensate by wiring them crossed. The two files were swapped so
-the names now match what each photo shows. What renders on screen is unchanged:
-recession on the left, the 14-year result on the right.
+**The hero Sharon pair was displayed reversed, and is now `ba-sharon-hero-*`.**
+The WordPress filenames were correct: the "before" file shows long teeth with
+exposed yellow roots (recession), the "after" file shows full gum coverage. The
+original markup wired them crossed, and a rename on 28 Oct 2026 matched the
+filenames to that crossed markup, so the hero showed the result as "Before".
+Fixed 29 Oct 2026, under new filenames on purpose: `/assets/*` is cached
+`immutable` for a year, so swapping contents under the old names would have
+kept the reversed pair on screen for anyone who had already visited.
+Rule of thumb when checking a pair: the **before** photo shows longer teeth and
+exposed root surfaces at the gum line.
 
 Markup is one empty div per slider; `site.js` builds the inside:
 
