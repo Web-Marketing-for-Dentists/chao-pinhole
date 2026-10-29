@@ -32,7 +32,7 @@ public/                 the deployable site — this is the source of truth toda
   assets/
     css/site.css        design tokens + every component, mobile-first
     js/site.js          nav, before/after sliders, carousels, tabs, countdown, scrollspy
-    img/                30 images
+    img/                33 images
     video/              2 videos
 
 src/                    Astro scaffolding — not yet driving the build
